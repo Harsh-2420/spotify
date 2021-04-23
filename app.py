@@ -27,7 +27,7 @@ def artist_recommend(name):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:31]
     artist_indices = [i[0] for i in sim_scores]
-    return names.iloc[artist_indices]
+    return list(names.iloc[artist_indices].values)
 
 
 @app.route("/", methods=['GET'])

@@ -13,21 +13,31 @@ import pickle
 app = Flask(__name__)
 
 # Load the trained model
-with open('./pickle/indices', 'rb') as f:
-    indices = pickle.load(f)
-with open('./pickle/names', 'rb') as f:
-    names = pickle.load(f)
-with open('./pickle/cosine_sim', 'rb') as f:
-    cosine_similarities = pickle.load(f)
+with open('./pickle/cos_sim_results', 'rb') as f:
+    results = pickle.load(f)
 
 
-def artist_recommend(name):
-    idx = indices[name]
-    sim_scores = list(enumerate(cosine_similarities[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:31]
-    artist_indices = [i[0] for i in sim_scores]
-    return list(names.iloc[artist_indices].values)
+def _recommend(item_id, num):
+    recs = results[item_id][:num]
+    preds = {}
+    for pair in recs:
+        preds[pair[1]] = pair[0]
+    return preds
+
+
+def get_similar_artists_multiple(artists, num=10):
+    dict_similar = {}
+    for artist, weight in artists.items():
+        dict_similar[artist] = _recommend(artist, num)
+    artists_all = []
+    for artist, similar_artists in dict_similar.items():
+        artists_all.append(list(similar_artists.keys()))
+    artists_unique = np.unique(artists_all).tolist()
+    artists_dict = {artist: 0 for artist in artists_unique}
+    for artist, similar_artists in dict_similar.items():
+        for similar_artist, score in similar_artists.items():
+            artists_dict[similar_artist] += artists[artist] * score
+    return list({k: v for k, v in sorted(artists_dict.items(), key=lambda item: item[1], reverse=True) if k not in artists}.keys())[0:num]
 
 
 @app.route("/", methods=['GET'])
@@ -38,8 +48,11 @@ def index():
 @app.route("/predict", methods=['POST'])
 def upload():
     if request.method == "POST":
+        num = int(request.form['rec'])
         name = request.form['text']
-        preds = artist_recommend(name)
+        weight = int(request.form['weight'])
+        artists = {name: weight}
+        preds = get_similar_artists_multiple(artists, num)
         return str(preds)
     return 'upload func ran'
 

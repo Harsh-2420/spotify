@@ -49,9 +49,11 @@ def index():
 def upload():
     if request.method == "POST":
         num = int(request.form['rec'])
-        name = request.form['text']
-        weight = int(request.form['weight'])
-        artists = {name: weight}
+        names = request.form['text'].split(',')
+        weights = request.form['weight'].split(',')
+        artists = {}
+        for k, name in enumerate(names):
+            artists[name] = weights[k]
         preds = get_similar_artists_multiple(artists, num)
         return str(preds)
     return 'upload func ran'

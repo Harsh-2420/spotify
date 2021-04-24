@@ -53,7 +53,7 @@ def upload():
         weights = request.form['weight'].split(',')
         artists = {}
         for k, name in enumerate(names):
-            artists[name] = weights[k]
+            artists[name.strip()] = int(weights[k])
         preds = get_similar_artists_multiple(artists, num)
         return str(preds)
     return 'upload func ran'

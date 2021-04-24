@@ -1,4 +1,4 @@
-# spotify
+# Spotify Recommendation
 Used the [Spotify](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks) dataset from Kaggle which is data on all songs available on Spotify from 1922 - 2021. This data includes details on artists and tracks with several variables being tracked for both.
 These variables include: 
 - genres and popularity (for artists)

@@ -1,0 +1,4 @@
+git_ignore/
+data/
+pickle/
+.DS_Store

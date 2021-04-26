@@ -1,8 +1,9 @@
 import time
-from flask import Flask, request, url_for, redirect, session
+from flask import Flask, request, url_for, redirect, session, render_template
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from git_ignore.config import *
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -39,7 +40,12 @@ def getTracks():
     # return sp.current_user_top_artists(time_range='medium_term', limit=20, offset=0)
     # return sp.current_user_saved_tracks(limit=20, offset=0)
 
-    return str(get_top_tracks_data(sp))
+    top_tracks_df = get_top_tracks_data(sp)
+    top_artists_df = get_top_artists_data(sp)
+    return render_template('base.html',
+                           tables=[top_artists_df.to_html(
+                               classes='data'), top_tracks_df.to_html(classes='data')],
+                           titles=[top_artists_df.columns.values, top_tracks_df.columns.values])
 
 
 def get_token():
@@ -67,11 +73,25 @@ def get_top_tracks_data(sp):
     tracks = {}
     for sp_range in ranges:
         tracks[sp_range] = []
-        results = sp.current_user_top_tracks(time_range=sp_range, limit=30)
+        results = sp.current_user_top_tracks(time_range=sp_range, limit=20)
         for i, item in enumerate(results['items']):
-            val = item['artists'][0]['name']
+            val = item['name']
             tracks[sp_range].append(val)
-    return tracks
+    top_tracks_df = pd.DataFrame(tracks)
+    return top_tracks_df
+
+
+def get_top_artists_data(sp):
+    ranges = ['short_term', 'medium_term', 'long_term']
+    artists = {}
+    for sp_range in ranges:
+        artists[sp_range] = []
+        results = sp.current_user_top_artists(time_range=sp_range, limit=15)
+        for i, item in enumerate(results['items']):
+            val = item['name']
+            artists[sp_range].append(val)
+    top_artists_df = pd.DataFrame(artists)
+    return top_artists_df
 
 
 if __name__ == "__main__":

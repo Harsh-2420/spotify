@@ -36,8 +36,10 @@ def getTracks():
         print("user not logged in")
         return redirect('/')
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    return sp.current_user_top_tracks(time_range='medium_term', limit=20, offset=0)
+    # return sp.current_user_top_artists(time_range='medium_term', limit=20, offset=0)
     # return sp.current_user_saved_tracks(limit=20, offset=0)
+
+    return str(get_top_tracks_data(sp))
 
 
 def get_token():
@@ -56,9 +58,20 @@ def create_spotify_ouath():
     return SpotifyOAuth(
         client_id=client_id,
         client_secret=client_secret,
-        # Where to come back to
         redirect_uri=url_for('redirectPage', _external=True),
         scope="user-library-read")
+
+
+def get_top_tracks_data(sp):
+    ranges = ['short_term', 'medium_term', 'long_term']
+    tracks = {}
+    for sp_range in ranges:
+        tracks[sp_range] = []
+        results = sp.current_user_top_tracks(time_range=sp_range, limit=30)
+        for i, item in enumerate(results['items']):
+            val = item['artists'][0]['name']
+            tracks[sp_range].append(val)
+    return tracks
 
 
 if __name__ == "__main__":

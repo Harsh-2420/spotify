@@ -20,12 +20,34 @@ def login():
 
 @app.route('/redirect')
 def redirectPage():
-    return "redirect"
+    sp_oauth = create_spotify_ouath()
+    session.clear()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+    session[TOKEN_INFO] = token_info
+    return redirect(url_for('getTracks', _external=True))
 
 
 @app.route('/getTracks')
 def getTracks():
+    try:
+        token_info = get_token()
+    except:
+        print("user not logged in")
+        return redirect('/')
     return 'some drake songs'
+
+
+def get_token():
+    token_info = session.get(TOKEN_INFO, None)
+    if not token_info:
+        raise "exception"
+    now = int(time.time())
+    is_expired = token_info['expires_at'] - now < 60
+    if (is_expired):
+        sp_oauth = create_spotify_ouath()
+        token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+    return token_info
 
 
 def create_spotify_ouath():

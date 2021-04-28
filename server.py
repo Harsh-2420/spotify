@@ -12,6 +12,9 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import plotly.express as px
 import plotly.figure_factory as ff
+import json
+from datetime import datetime
+
 
 app = Flask(__name__)
 
@@ -45,15 +48,17 @@ def getTracks():
         print("user not logged in")
         return redirect('/')
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    # return sp.current_user_top_artists(time_range='medium_term', limit=20, offset=0)
-    # return sp.current_user_saved_tracks(limit=20, offset=0)
 
+    song_name, song_duration, song_popularity, release_date, artist_name = get_top_songs_over_release_date_vs_popularity(
+        sp)
+    bar = plot_top_songs_over_release_date_vs_popularity(
+        song_name, song_duration, song_popularity, release_date, artist_name)
     top_tracks_df = get_top_tracks_data(sp)
     top_artists_df = get_top_artists_data(sp)
     return render_template('base.html',
                            tables=[top_artists_df.to_html(
                                classes='data'), top_tracks_df.to_html(classes='data')],
-                           titles=[top_artists_df.columns.values, top_tracks_df.columns.values])
+                           titles=[top_artists_df.columns.values, top_tracks_df.columns.values], plot=bar)
 
 
 def get_token():
@@ -115,57 +120,87 @@ def get_top_albums(sp):
     return top_albums_df
 
 
-def plot_top_songs_over_release_date_vs_popularity(sp):
-    tracks = {}
-    tracks['short_term'] = []
+def get_top_songs_over_release_date_vs_popularity(sp):
+
+    song_name = []
+    release_date = []
+    song_popularity = []
+    song_duration = []
+    artist_name = []
+
+    # tracks['short_term'] = []
     results = sp.current_user_top_tracks(time_range="short_term", limit=20)
     for i, item in enumerate(results['items']):
-        song_name = val['name']
-        release_date = sp.album(item["album"]["external_urls"]["spotify"])[
+        song_name.append(item['name'])
+        date = sp.album(item["album"]["external_urls"]["spotify"])[
             'release_date']
-        release_date = datetime.strptime(release_date, "%Y-%m-%d").date()
-        song_popularity = item['popularity']  # int
-        song_duration = item['duration_ms']
+        release_date.append(datetime.strptime(date, "%Y-%m-%d").date())
+        song_popularity.append(item['popularity'])
+        song_duration.append(item['duration_ms'])
+        artist_name.append(item['artists'][0]['name'])
 
-        tracks[sp_range].append(val)
+    # df = pd.DataFrame(
+    # {'song_name': song_name,
+    #  'song_duration': song_duration,
+    #  'song_popularity': song_popularity,
+    #  'release_date': release_date,
+    #  'artist_name': artist_name
+    # })
 
-    df = px.data.gapminder()
-    fig = px.scatter(df.query("year==2007"), x="gdpPercap", y="lifeExp",
-                     size="pop", color="continent",
-                     hover_name="country", log_x=True, size_max=60)
-    fig.show()
-# def plot_top_albums(df):
-#     return dcc.Graph(
-#         id='top-albums',
-#         figure={
-#             'data': [
-#                 go.Table(
-#                     columnwidth=[35, 20, 11],
-#                     header=dict(
-#                         values=list(
-#                             f"<b>{c}</b>" for c in
-#                             df.columns),
-#                         fill_color='#1759c2',
-#                         align='center',
-#                         height=30,
-#                         font=dict(color='white', size=18)
-#                     ),
-#                     cells=dict(values=[df[c] for c in
-#                                        df.columns],
-#                                # fill_color=['white', 'white', clrs_6_mo, clrs_last_mo],
-#                                line_color='#e1f0e5',
-#                                align='center',
-#                                font=dict(color='black', size=18),
-#                                height=30
-#                                )
-#                 )
-#             ],
-#             'layout': go.Layout(
-#                 margin=dict(t=0, l=0, r=0, b=0),
-#                 height=800
-#             )
-#         }
-#     )
+    return song_name, song_duration, song_popularity, release_date, artist_name
+
+
+def plot_top_songs_over_release_date_vs_popularity(song_name, song_duration, song_popularity, release_date, artist_name):
+
+    hover_text = []
+    bubble_size = []
+
+    # for index, row in df_2007.iterrows():
+    # hover_text.append(('Country: {country}<br>'+
+    #                 'Life Expectancy: {lifeExp}<br>'+
+    #                 'GDP per capita: {gdp}<br>'+
+    #                 'Population: {pop}<br>'+
+    #                 'Year: {year}').format(country=row['country'],
+    #                                         lifeExp=row['lifeExp'],
+    #                                         gdp=row['gdpPercap'],
+    #                                         pop=row['pop'],
+    #                                         year=row['year']))
+    for k in range(len(song_name)):
+        hover_text.append(('Song Name: {song_name}<br>' +
+                           'Artist Name: {artist_name}'
+                           ).format(song_name=song_name[k],
+                                    artist_name=artist_name[k],
+                                    ))
+    bubble_size = song_duration
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=release_date, y=song_popularity,
+        name=song_name, text=hover_text,
+        marker_size=bubble_size,
+    ))
+    fig.update_traces(mode='markers', marker=dict(sizemode='area',
+                                                  sizeref=sizeref, line_width=2))
+
+    fig.update_layout(
+        title='Life Expectancy v. Per Capita GDP, 2007',
+        xaxis=dict(
+            title='GDP per capita (2000 dollars)',
+            gridcolor='white',
+            type='log',
+            gridwidth=2,
+        ),
+        yaxis=dict(
+            title='Life Expectancy (years)',
+            gridcolor='white',
+            gridwidth=2,
+        ),
+        paper_bgcolor='rgb(243, 243, 243)',
+        plot_bgcolor='rgb(243, 243, 243)',
+    )
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
 
 
 if __name__ == "__main__":

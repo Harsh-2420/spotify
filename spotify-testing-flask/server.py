@@ -16,21 +16,22 @@ import json
 from datetime import datetime
 
 
-app = Flask(__name__)
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server, url_base_pathname='/app/')
 
-app.secret_key = "spotty"
-app.config['SESSION_COOKIE_NAME'] = "Harsh Cookie"
+server.secret_key = "spotty"
+server.config['SESSION_COOKIE_NAME'] = "Harsh Cookie"
 TOKEN_INFO = "token_info"
 
 
-@app.route('/')
+@server.route('/')
 def login():
     sp_oauth = create_spotify_ouath()
     auth_url = sp_oauth.get_authorize_url()
     return redirect(auth_url)
 
 
-@app.route('/redirect')
+@server.route('/redirect')
 def redirectPage():
     sp_oauth = create_spotify_ouath()
     session.clear()
@@ -40,7 +41,7 @@ def redirectPage():
     return redirect(url_for('getTracks', _external=True))
 
 
-@app.route('/getTracks')
+@server.route('/getTracks')
 def getTracks():
     try:
         token_info = get_token()
@@ -48,15 +49,10 @@ def getTracks():
         print("user not logged in")
         return redirect('/')
     sp = spotipy.Spotify(auth=token_info['access_token'])
-
-    # top_tracks_df = get_top_tracks_data(sp)
-    # top_artists_df = get_top_artists_data(sp)
-    results = sp.current_user_saved_tracks(limit=20, offset=0)
-    # return render_template('base.html',
-    #                        tables=[top_artists_df.to_html(
-    #                            classes='data'), top_tracks_df.to_html(classes='data')],
-    #                        titles=[top_artists_df.columns.values, top_tracks_df.columns.values])
-    return results
+    df = get_saved_tracks_data(sp)
+    with open('saved_tracks.pkl', 'wb') as f:
+        pickle.dump(df, f)
+    return {"Data": True}
 
 
 def get_token():
@@ -79,30 +75,47 @@ def create_spotify_ouath():
         scope="user-library-read")
 
 
-def get_top_tracks_data(sp):
-    ranges = ['short_term', 'medium_term', 'long_term']
-    tracks = {}
-    for sp_range in ranges:
-        tracks[sp_range] = []
-        results = sp.current_user_top_tracks(time_range=sp_range, limit=20)
-        for i, item in enumerate(results['items']):
-            val = item['name']
-            tracks[sp_range].append(val)
-    top_tracks_df = pd.DataFrame(tracks)
-    return top_tracks_df
+def get_saved_tracks_data(sp):
+    results = sp.current_user_saved_tracks(limit=20, offset=0)['items']
+    date = []
+    name = []
+    for k, item in enumerate(results):
+        date.append(datetime.strptime(
+            item['added_at'][:11], '%Y-%m-%d').date())
+        name.append(item['name'])
+    df = pd.DataFrame(
+        {'release_date': date,
+         'name': name
+         })
+    return df
 
 
-def get_top_artists_data(sp):
-    ranges = ['short_term', 'medium_term', 'long_term']
-    artists = {}
-    for sp_range in ranges:
-        artists[sp_range] = []
-        results = sp.current_user_top_artists(time_range=sp_range, limit=15)
-        for i, item in enumerate(results['items']):
-            val = item['name']
-            artists[sp_range].append(val)
-    top_artists_df = pd.DataFrame(artists)
-    return top_artists_df
+with open('saved_tracks.pkl', 'rb') as f:
+    df = pickle.load(f)
+
+
+app.layout = html.Div([
+    dcc.Graph(id="scatter-plot"),
+    html.P("Petal Width:"),
+    dcc.RangeSlider(
+        id='range-slider',
+        min=0, max=2.5, step=0.1,
+        marks={0: '0', 2.5: '2.5'},
+        value=[0.5, 2]
+    ),
+])
+
+
+@app.callback(
+    Output("scatter-plot", "figure"),
+    [Input("range-slider", "value")])
+def update_bar_chart(slider_range):
+    low, high = slider_range
+    # mask = (df['petal_width'] > low) & (df['petal_width'] < high)
+    fig = px.scatter(
+        df, x="release_date", y="name",
+        color="name")
+    return fig
 
 
 if __name__ == "__main__":

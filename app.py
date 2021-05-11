@@ -1,60 +1,124 @@
-# from flask import Flask, render_template, jsonify, request, url_for
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import tensorflow as tf
-# from tensorflow import keras
-# import os
-# import pickle
-
-# # Define Flask app
-# app = Flask(__name__)
-
-# # Load the trained model
-# with open('./pickle/cos_sim_results', 'rb') as f:
-#     results = pickle.load(f)
-
-
-# def _recommend(item_id, num):
-#     recs = results[item_id][:num]
-#     preds = {}
-#     for pair in recs:
-#         preds[pair[1]] = pair[0]
-#     return preds
+import time
+from flask import Flask, request, url_for, redirect, session, render_template
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+from git_ignore.config import *
+import pandas as pd
+import dash
+import dash_table
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+import plotly.graph_objs as go
+import plotly.express as px
+import plotly.figure_factory as ff
+import json
+from datetime import datetime
 
 
-# def get_similar_artists_multiple(artists, num=10):
-#     dict_similar = {}
-#     for artist, weight in artists.items():
-#         dict_similar[artist] = _recommend(artist, num)
-#     artists_all = []
-#     for artist, similar_artists in dict_similar.items():
-#         artists_all.append(list(similar_artists.keys()))
-#     artists_unique = np.unique(artists_all).tolist()
-#     artists_dict = {artist: 0 for artist in artists_unique}
-#     for artist, similar_artists in dict_similar.items():
-#         for similar_artist, score in similar_artists.items():
-#             artists_dict[similar_artist] += artists[artist] * score
-#     return list({k: v for k, v in sorted(artists_dict.items(), key=lambda item: item[1], reverse=True) if k not in artists}.keys())[0:num]
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server, url_base_pathname='/app')
+
+server.secret_key = "spotty"
+server.config['SESSION_COOKIE_NAME'] = "Harsh Cookie"
+TOKEN_INFO = "token_info"
 
 
-# @app.route("/", methods=['GET'])
-# def index():
-#     return render_template('index.html')
+@server.route('/')
+def login():
+    sp_oauth = create_spotify_ouath()
+    auth_url = sp_oauth.get_authorize_url()
+    return redirect(auth_url)
 
 
-# @app.route("/predict", methods=['POST'])
-# def upload():
-#     if request.method == "POST":
-#         num = int(request.form['rec'])
-#         names = request.form['text'].split(',')
-#         weights = request.form['weight'].split(',')
-#         artists = {}
-#         for k, name in enumerate(names):
-#             artists[name.strip()] = int(weights[k])
-#         preds = get_similar_artists_multiple(artists, num)
-#         return str(preds)
-#     return 'upload func ran'
+@server.route('/redirect')
+def redirectPage():
+    sp_oauth = create_spotify_ouath()
+    session.clear()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+    session[TOKEN_INFO] = token_info
+    return redirect(url_for('getTracks', _external=True))
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+@server.route('/getTracks')
+def getTracks():
+    try:
+        token_info = get_token()
+    except:
+        print("user not logged in")
+        return redirect('/')
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    top_tracks_df = get_top_tracks_data(sp)
+    return render_template('base.html',
+                           tables=[top_tracks_df.to_html(classes='data')],
+                           titles=[top_tracks_df.columns.values])
+
+
+def get_token():
+    token_info = session.get(TOKEN_INFO, None)
+    if not token_info:
+        raise "exception"
+    now = int(time.time())
+    is_expired = token_info['expires_at'] - now < 60
+    if (is_expired):
+        sp_oauth = create_spotify_ouath()
+        token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+    return token_info
+
+
+def create_spotify_ouath():
+    return SpotifyOAuth(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=url_for('redirectPage', _external=True),
+        scope="user-library-read")
+
+
+def get_top_tracks_data(sp):
+    ranges = ['short_term', 'medium_term', 'long_term']
+    tracks = {}
+    for sp_range in ranges:
+        tracks[sp_range] = []
+        results = sp.current_user_top_tracks(time_range=sp_range, limit=20)
+        for i, item in enumerate(results['items']):
+            val = item['name']
+            tracks[sp_range].append(val)
+    top_tracks_df = pd.DataFrame(tracks)
+    return top_tracks_df
+
+
+if __name__ == "__main__":
+    server.run(debug=True)  # If Flask App
+    # app.run_server(debug=True)  # If Dash App
+
+
+# def get_top_songs_over_release_date_vs_popularity(sp):
+
+#     song_name = []
+#     release_date = []
+#     song_popularity = []
+#     song_duration = []
+#     artist_name = []
+
+#     # tracks['short_term'] = []
+#     results = sp.current_user_top_tracks(time_range="short_term", limit=20)
+#     for i, item in enumerate(results['items']):
+#         song_name.append(item['name'])
+#         date = sp.album(item["album"]["external_urls"]["spotify"])[
+#             'release_date']
+#         release_date.append(datetime.strptime(date, "%Y-%m-%d").date().year)
+#         song_popularity.append(item['popularity'])
+#         song_duration.append(item['duration_ms'])
+#         artist_name.append(item['artists'][0]['name'])
+
+#     # df = pd.DataFrame(
+#     # {'song_name': song_name,
+#     #  'song_duration': song_duration,
+#     #  'song_popularity': song_popularity,
+#     #  'release_date': release_date,
+#     #  'artist_name': artist_name
+#     # })
+
+#     return song_name, song_duration, song_popularity, release_date, artist_name

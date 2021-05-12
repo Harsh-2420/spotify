@@ -1,5 +1,4 @@
-from flask import render_template, Blueprint, request, session, current_app
-import pickle
+from flask import render_template, Blueprint, current_app
 import numpy as np
 import pandas as pd
 import math
@@ -15,21 +14,13 @@ top = Blueprint('top', __name__, template_folder='templates')
 @top.route('/chart1')
 def chart1():
     sp = current_app.config['sp']
+
     top_tracks_df = get_top_tracks_data(sp)
-    # session['top_tracks'] = top_tracks_df
-
-    popular_df = get_top_songs_over_release_date_vs_popularity(sp)
-    # popular_df = popular_df.to_dict()
-    # session['popular_df'] = popular_df
-
-    # top_tracks_df = session.get('top_tracks', None)
     top_tracks_df = pd.DataFrame(top_tracks_df)
 
-    # genre_df = session.get('genre_df', None)
-    # genre_df = pd.DataFrame(genre_df)
+    # genre_df = get_genres(sp)
 
-    # popular_df = session.get('popular_df', None)
-    # popular_df = pd.DataFrame(popular_df)
+    popular_df = get_top_songs_over_release_date_vs_popularity(sp)
     hover_text = []
     bubble_size = []
 
@@ -153,3 +144,29 @@ def get_top_songs_over_release_date_vs_popularity(sp):
          })
 
     return df
+
+
+# def get_genres(sp):
+#     parent_genre = []
+#     artist_name_list = []
+#     results = sp.current_user_top_tracks(time_range='short_term', limit=50)
+#     for i, item in enumerate(results['items']):
+#         artist_name = item['artists'][0]['name']
+#         search = sp.search(artist_name)
+#         track = search['tracks']['items'][0]
+#         artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
+#         genre_list = artist['genres']
+#         top_genres = get_top_genres()
+#         for genre in top_genres:
+#             if len(genre_list) > 0:
+#                 if genre in genre_list:
+#                     parent_genre.append(genre)
+#                     artist_name_list.append(artist_name)
+#     genre_df = pd.DataFrame()
+#     genre_df['parent_genre'] = parent_genre
+#     genre_df['artist_name_list'] = artist_name_list
+#     return genre_df
+# def get_top_genres():
+#     with open('./pickle/top_genres.pkl', 'rb') as handle:
+#         top_genres = pickle.load(handle)
+#     return top_genres

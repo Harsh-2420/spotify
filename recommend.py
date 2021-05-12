@@ -3,15 +3,15 @@ import pickle
 import numpy as np
 
 
-recommend = Blueprint('recommend', __name__, template_folder='templates')
+recommend_ = Blueprint('recommend', __name__, template_folder='templates')
 
 
-@recommend.route('/chart2/', methods=['GET'])
-def chart2():
+@recommend_.route('/recommend/', methods=['GET'])
+def recommend():
     return render_template('recommend.html')
 
 
-@recommend.route("/predict/", methods=['POST'])
+@recommend_.route("/predict/", methods=['POST'])
 def upload():
     if request.method == "POST":
         num = int(request.form['rec'])
@@ -31,7 +31,7 @@ with open('./pickle/cos_sim_results', 'rb') as f:
     results = pickle.load(f)
 
 
-def _recommend(item_id, num):
+def recommend_artist(item_id, num):
     recs = results[item_id][:num]
     preds = {}
     for pair in recs:
@@ -42,7 +42,7 @@ def _recommend(item_id, num):
 def get_similar_artists_multiple(artists, num=10):
     dict_similar = {}
     for artist, weight in artists.items():
-        dict_similar[artist] = _recommend(artist, num)
+        dict_similar[artist] = recommend_artist(artist, num)
     artists_all = []
     for artist, similar_artists in dict_similar.items():
         artists_all.append(list(similar_artists.keys()))

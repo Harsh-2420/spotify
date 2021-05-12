@@ -8,11 +8,11 @@ import plotly.graph_objects as go
 import json
 from datetime import datetime
 
-top = Blueprint('top', __name__, template_folder='templates')
+top_ = Blueprint('top', __name__, template_folder='templates')
 
 
-@top.route('/chart1')
-def chart1():
+@top_.route('/top')
+def top():
     sp = current_app.config['sp']
 
     top_tracks_df = get_top_tracks_data(sp)
@@ -95,7 +95,7 @@ def chart1():
     description = """
     Use a given keyword to get most popular tweets. Give option for recent and custom keyword
     """
-    return render_template('notdash2.html', graphJSON=graphJSON, graphJSON2=graphJSON2, header=header, description=description)
+    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, header=header, description=description)
 
 
 def get_top_tracks_data(sp):

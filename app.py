@@ -3,8 +3,9 @@ from flask import Flask, request, url_for, redirect, session, render_template
 from flask_session import Session
 
 # Blueprint imports
-from recommend import recommend
-from top import top
+from recommend import recommend_
+from top import top_
+from sunburst import sunburst_
 
 # Spotipy imports
 import time
@@ -13,8 +14,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 app = Flask(__name__)
-app.register_blueprint(recommend, url_prefix="")
-app.register_blueprint(top, url_prefix="")
+app.register_blueprint(recommend_, url_prefix="")
+app.register_blueprint(top_, url_prefix="")
+app.register_blueprint(sunburst_, url_prefix="")
 
 app.secret_key = "spotty"
 sess = Session()

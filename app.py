@@ -1,5 +1,6 @@
 import time
 from flask import Flask, request, url_for, redirect, session, render_template
+from recommend import recommend
 from flask.globals import g
 import plotly
 import numpy as np
@@ -19,6 +20,7 @@ import pandas as pd
 import math
 
 app = Flask(__name__)
+app.register_blueprint(recommend, url_prefix="")
 
 app.secret_key = "spotty"
 sess = Session()
@@ -153,9 +155,9 @@ def chart1():
     return render_template('notdash2.html', graphJSON=graphJSON, graphJSON2=graphJSON2, header=header, description=description)
 
 
-@app.route('/chart2', methods=['GET'])
-def chart2():
-    return render_template('recommend.html')
+# @app.route('/chart2', methods=['GET'])
+# def chart2():
+#     return render_template('recommend.html')
 
 
 @app.route("/predict", methods=['POST'])
@@ -268,33 +270,33 @@ def get_top_songs_over_release_date_vs_popularity(sp):
 #     return top_genres
 
 
-# recommendationPage
-# Load the trained model
-with open('./pickle/cos_sim_results', 'rb') as f:
-    results = pickle.load(f)
+# # recommendationPage
+# # Load the trained model
+# with open('./pickle/cos_sim_results', 'rb') as f:
+#     results = pickle.load(f)
 
 
-def _recommend(item_id, num):
-    recs = results[item_id][:num]
-    preds = {}
-    for pair in recs:
-        preds[pair[1]] = pair[0]
-    return preds
+# def _recommend(item_id, num):
+#     recs = results[item_id][:num]
+#     preds = {}
+#     for pair in recs:
+#         preds[pair[1]] = pair[0]
+#     return preds
 
 
-def get_similar_artists_multiple(artists, num=10):
-    dict_similar = {}
-    for artist, weight in artists.items():
-        dict_similar[artist] = _recommend(artist, num)
-    artists_all = []
-    for artist, similar_artists in dict_similar.items():
-        artists_all.append(list(similar_artists.keys()))
-    artists_unique = np.unique(artists_all).tolist()
-    artists_dict = {artist: 0 for artist in artists_unique}
-    for artist, similar_artists in dict_similar.items():
-        for similar_artist, score in similar_artists.items():
-            artists_dict[similar_artist] += artists[artist] * score
-    return list({k: v for k, v in sorted(artists_dict.items(), key=lambda item: item[1], reverse=True) if k not in artists}.keys())[0:num]
+# def get_similar_artists_multiple(artists, num=10):
+#     dict_similar = {}
+#     for artist, weight in artists.items():
+#         dict_similar[artist] = _recommend(artist, num)
+#     artists_all = []
+#     for artist, similar_artists in dict_similar.items():
+#         artists_all.append(list(similar_artists.keys()))
+#     artists_unique = np.unique(artists_all).tolist()
+#     artists_dict = {artist: 0 for artist in artists_unique}
+#     for artist, similar_artists in dict_similar.items():
+#         for similar_artist, score in similar_artists.items():
+#             artists_dict[similar_artist] += artists[artist] * score
+#     return list({k: v for k, v in sorted(artists_dict.items(), key=lambda item: item[1], reverse=True) if k not in artists}.keys())[0:num]
 
 
 if __name__ == "__main__":

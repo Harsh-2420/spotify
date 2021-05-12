@@ -176,12 +176,16 @@ def get_top_songs_over_release_date_vs_popularity(sp):
     song_duration = []
     artist_name = []
 
-    results = sp.current_user_top_tracks(time_range="short_term", limit=20)
+    results = sp.current_user_top_tracks(time_range="long_term", limit=30)
     for i, item in enumerate(results['items']):
         song_name.append(item['name'])
         date = sp.album(item["album"]["external_urls"]["spotify"])[
             'release_date']
-        release_date.append(datetime.strptime(date, "%Y-%m-%d").date().year)
+        try:
+            release_date.append(datetime.strptime(
+                date, "%Y-%m-%d").date().year)
+        except:
+            release_date.append(str(date))
         song_popularity.append(item['popularity'])
         song_duration.append(item['duration_ms'])
         artist_name.append(item['artists'][0]['name'])

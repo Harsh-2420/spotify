@@ -1,21 +1,27 @@
-# import spotipy
-# import pandas as pd
-# from spotipy.oauth2 import SpotifyOAuth
-# from datetime import datetime
-# from git_ignore.config import *
+import spotipy
+import pandas as pd
+from spotipy.oauth2 import SpotifyOAuth
+from datetime import datetime
+import pickle
+from git_ignore.config import *
 
-# scope = 'user-top-read'
-# sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
-#                                                client_secret=client_secret,
-#                                                redirect_uri="http://localhost:5000",
-#                                                scope=scope))
+scope = 'user-top-read'
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
+                                               client_secret=client_secret,
+                                               redirect_uri="http://localhost:5000",
+                                               scope=scope))
 
-# results = sp.current_user_top_tracks(time_range='short_term', limit=50)
-# temp = results['items'][1]["album"]
+results = sp.current_user_top_tracks(time_range='short_term', limit=50)
+artist_name = results['items'][1]['artists'][0]['name']
+search = sp.search(artist_name)
+track = search['tracks']['items'][0]
+artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
+genre = artist['genres']
+print(type(genre))
 
 
 # date = sp.album(temp["external_urls"]["spotify"])['release_date']
-# print(datetime.strptime(date, "%Y-%m-%d").date().year)
+# print(pd.to_datetime(date).replace(tzinfo=None))
 
 
 # # Get Release Date:

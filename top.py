@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, session
+from flask import render_template, Blueprint, request, session, current_app
 import pickle
 import numpy as np
 import pandas as pd
@@ -7,20 +7,29 @@ import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import json
+from datetime import datetime
 
 top = Blueprint('top', __name__, template_folder='templates')
 
 
 @top.route('/chart1')
 def chart1():
-    top_tracks_df = session.get('top_tracks', None)
+    sp = current_app.config['sp']
+    top_tracks_df = get_top_tracks_data(sp)
+    # session['top_tracks'] = top_tracks_df
+
+    popular_df = get_top_songs_over_release_date_vs_popularity(sp)
+    # popular_df = popular_df.to_dict()
+    # session['popular_df'] = popular_df
+
+    # top_tracks_df = session.get('top_tracks', None)
     top_tracks_df = pd.DataFrame(top_tracks_df)
 
     # genre_df = session.get('genre_df', None)
     # genre_df = pd.DataFrame(genre_df)
 
-    popular_df = session.get('popular_df', None)
-    popular_df = pd.DataFrame(popular_df)
+    # popular_df = session.get('popular_df', None)
+    # popular_df = pd.DataFrame(popular_df)
     hover_text = []
     bubble_size = []
 
@@ -96,3 +105,51 @@ def chart1():
     Use a given keyword to get most popular tweets. Give option for recent and custom keyword
     """
     return render_template('notdash2.html', graphJSON=graphJSON, graphJSON2=graphJSON2, header=header, description=description)
+
+
+def get_top_tracks_data(sp):
+    ranges = ['short_term', 'medium_term', 'long_term']
+    tracks = {}
+    for sp_range in ranges:
+        tracks[sp_range] = []
+        results = sp.current_user_top_tracks(
+            time_range=sp_range, limit=30, offset=0)
+        for i, item in enumerate(results['items']):
+            val = item['artists'][0]['name']
+            tracks[sp_range].append(val)
+    return tracks
+
+
+def get_top_songs_over_release_date_vs_popularity(sp):
+
+    song_name = []
+    release_date = []
+    song_popularity = []
+    song_duration = []
+    artist_name = []
+
+    results = sp.current_user_top_tracks(time_range="long_term", limit=30)
+    for i, item in enumerate(results['items']):
+        song_name.append(item['name'])
+        date = sp.album(item["album"]["external_urls"]["spotify"])[
+            'release_date']
+        try:
+            date = str(datetime.strptime(date, "%Y-%m-%d").date())
+            date = date[:len(date) - 13]
+        except:
+            date = str(datetime.strptime(date, "%Y").date())
+            date = date[:len(date) - 13]
+        release_date.append(date)
+        song_popularity.append(item['popularity'])
+        song_duration.append(item['duration_ms'])
+        artist_name.append(item['artists'][0]['name'])
+
+    df = pd.DataFrame(
+        {'song_name': song_name,
+         'song_duration': song_duration,
+         'song_popularity': song_popularity,
+         'release_date': release_date,
+         'artist_name': artist_name
+         })
+
+    return df

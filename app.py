@@ -56,12 +56,13 @@ def getTracks():
         return redirect('/')
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    top_tracks_df = get_top_tracks_data(sp)
-    session['top_tracks'] = top_tracks_df
+    app.config['sp'] = sp
+    # top_tracks_df = get_top_tracks_data(sp)
+    # session['top_tracks'] = top_tracks_df
 
-    popular_df = get_top_songs_over_release_date_vs_popularity(sp)
-    popular_df = popular_df.to_dict()
-    session['popular_df'] = popular_df
+    # popular_df = get_top_songs_over_release_date_vs_popularity(sp)
+    # popular_df = popular_df.to_dict()
+    # session['popular_df'] = popular_df
 
     # genre_df = get_genres(sp)
     # genre_df = genre_df.to_dict()
@@ -104,57 +105,6 @@ def create_spotify_ouath():
         scope="user-top-read user-library-read")
 
 
-
-
-def get_top_tracks_data(sp):
-    ranges = ['short_term', 'medium_term', 'long_term']
-    tracks = {}
-    for sp_range in ranges:
-        tracks[sp_range] = []
-        results = sp.current_user_top_tracks(
-            time_range=sp_range, limit=30, offset=0)
-        for i, item in enumerate(results['items']):
-            val = item['artists'][0]['name']
-            tracks[sp_range].append(val)
-    return tracks
-
-
-def get_top_songs_over_release_date_vs_popularity(sp):
-
-    song_name = []
-    release_date = []
-    song_popularity = []
-    song_duration = []
-    artist_name = []
-
-    results = sp.current_user_top_tracks(time_range="long_term", limit=30)
-    for i, item in enumerate(results['items']):
-        song_name.append(item['name'])
-        date = sp.album(item["album"]["external_urls"]["spotify"])[
-            'release_date']
-        try:
-            date = str(datetime.strptime(date, "%Y-%m-%d").date())
-            date = date[:len(date) - 13]
-        except:
-            date = str(datetime.strptime(date, "%Y").date())
-            date = date[:len(date) - 13]
-        release_date.append(date)
-        song_popularity.append(item['popularity'])
-        song_duration.append(item['duration_ms'])
-        artist_name.append(item['artists'][0]['name'])
-
-    df = pd.DataFrame(
-        {'song_name': song_name,
-         'song_duration': song_duration,
-         'song_popularity': song_popularity,
-         'release_date': release_date,
-         'artist_name': artist_name
-         })
-
-    return df
-
-
-
 # def get_genres(sp):
 #     parent_genre = []
 #     artist_name_list = []
@@ -175,8 +125,6 @@ def get_top_songs_over_release_date_vs_popularity(sp):
 #     genre_df['parent_genre'] = parent_genre
 #     genre_df['artist_name_list'] = artist_name_list
 #     return genre_df
-
-
 # def get_top_genres():
 #     with open('./pickle/top_genres.pkl', 'rb') as handle:
 #         top_genres = pickle.load(handle)

@@ -11,8 +11,8 @@
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
-    <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" /> -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
@@ -65,21 +65,25 @@
             <div class="row justify-content-center">
                 <!-- Portfolio Item 1-->
                 <div class="col-md-6 col-lg-4 mb-5">
+                    <a href="top">
                     <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal1">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                             <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
                         <img class="img-fluid" src="{{ url_for('static', filename='img/cabin.png') }}" alt="..." />
                     </div>
+                </a>
                 </div>
                 <!-- Portfolio Item 2-->
                 <div class="col-md-6 col-lg-4 mb-5">
+                    <a href="sunburst">
                     <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                             <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
                         <img class="img-fluid" src="{{ url_for('static', filename='img/cake.png') }}" alt="..." />
                     </div>
+                </a>
                 </div>
                 <!-- Portfolio Item 3-->
                 <div class="col-md-6 col-lg-4 mb-5">
@@ -196,11 +200,8 @@
                 </div>
                 <!-- Footer About Text-->
                 <div class="col-lg-4">
-                    <h4 class="text-uppercase mb-4">About Freelancer</h4>
+                    <h4 class="text-uppercase mb-4"></h4>
                     <p class="lead mb-0">
-                        
-                        <a href="http://startbootstrap.com">Start Bootstrap</a>
-                        .
                     </p>
                 </div>
             </div>

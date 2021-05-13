@@ -12,7 +12,7 @@ from datetime import datetime
 sunburst_ = Blueprint('sunburst', __name__, template_folder='templates')
 
 
-@sunburst_.route('/sunburst')
+@sunburst_.route('/sunburst/')
 def sunburst():
     sp = current_app.config['sp']
     top_artist_df = create_top_artist_data(sp)
@@ -25,14 +25,6 @@ def sunburst():
         parents=sunburst_data['genres'],
         # values=sunburst_data['values'],
     ))
-    # fig = go.Figure()
-    # fig.add_trace(go.Sunburst(
-    #     labels=['rock', 'rap', 'pop', 'Nirvana',
-    #             'J.Cole', 'Drake', 'Ed', 'Queen', 'Nick'],
-    #     parents=['', '', '', 'rock', 'rap', 'rap', 'pop', 'rock', 'rap'],
-    #     values=[1, 1, 1, 3, 2, 5, 1, 5, 3],
-    # ))
-
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)

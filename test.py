@@ -1,3 +1,4 @@
+import ast
 import spotipy
 import pandas as pd
 from spotipy.oauth2 import SpotifyOAuth
@@ -10,35 +11,56 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="http://localhost:5000",
                                                scope=scope))
-
-results = sp.current_user_top_tracks(time_range='short_term', limit=50)
-artist_name = results['items'][1]['artists'][0]['name']
-search = sp.search(artist_name)
-track = search['tracks']['items'][0]
-artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
-genre = artist['genres']
-print(type(genre))
+results = sp.current_user_top_artists(time_range='short_term', limit=50)
+# print(results['items'][1])
 
 
-# date = sp.album(temp["external_urls"]["spotify"])['release_date']
-# print(pd.to_datetime(date).replace(tzinfo=None))
+def create_top_artist_data(sp):
+    results = sp.current_user_top_artists(time_range='short_term', limit=50)
+    genre = []
+    names = []
+    for item in results['items']:
+        if item['genres'] == []:
+            continue
+        else:
+            genre.append(item['genres'])
+            names.append(item['name'])
+    df = pd.DataFrame()
+    df['genres'] = genre
+    df['name'] = names
+    return df
 
 
-# # Get Release Date:
-# # release_date = sp.album(
-# #     results['items'][1]["album"]["external_urls"]["spotify"])['release_date']
-# # release_date = datetime.strptime(release_date, "%Y-%m-%d").date()
-# # print(type(release_date))
-# # print(release_date)
+def top_genres(df):
+    genres_top_count = {}
+    for genre_list in df['genres']:
+        for genre in genre_list:
+            if genre not in genres_top_count:
+                genres_top_count[genre] = 1
+            else:
+                genres_top_count[genre] += 1
+    genres_top_count = pd.Series(genres_top_count).sort_values(ascending=False)
+    return genres_top_count.head()
 
 
-# # ranges = ['short_term', 'medium_term', 'long_term']
-# # artists = {}
-# # for sp_range in ranges:
-# #     artists[sp_range] = []
-# #     results = sp.current_user_top_artists(time_range=sp_range, limit=18)
-# #     for i, item in enumerate(results['items']):
-# #         val = item['name']
-# #         artists[sp_range].append(val)
-# # top_artists_df = pd.DataFrame(artists)
-# # print(top_artists_df)
+def create_sunburst_data(df, top_genres):
+    genres, artists, values = [], [], []
+    for i, row in df.iterrows():
+        for genre, value in zip(top_genres.index, top_genres.values):
+            if genre in row['genres']:
+                genres.append(genre)
+                values.append(str(value))
+                artists.append(row['name'])
+
+    dataframe = pd.DataFrame()
+    dataframe['artist'] = artists
+    dataframe['genres'] = genres
+    dataframe['values'] = values
+    return dataframe
+
+
+top_artist_df = create_top_artist_data(sp)
+top_genres_short = top_genres(top_artist_df)
+sunburst_data = create_sunburst_data(top_artist_df, top_genres_short)
+
+print(sunburst_data)

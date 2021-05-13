@@ -5,3 +5,4 @@ code/pages/pickle/
 *.pyc
 .ipynb_checkpoints
 .cache
+.env

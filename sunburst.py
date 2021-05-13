@@ -19,19 +19,19 @@ def sunburst():
     top_genres_short = top_genres(top_artist_df)
     sunburst_data = create_sunburst_data(top_artist_df, top_genres_short)
 
-    # fig = go.Figure()
-    # fig.add_trace(go.Sunburst(
-    #     labels=sunburst_data['artist'],
-    #     parents=sunburst_data['genres'],
-    #     values=sunburst_data['values'],
-    # ))
     fig = go.Figure()
     fig.add_trace(go.Sunburst(
-        labels=['rock', 'rap', 'pop', 'Nirvana',
-                'J.Cole', 'Drake', 'Ed', 'Queen', 'Nick'],
-        parents=['', '', '', 'rock', 'rap', 'rap', 'pop', 'rock', 'rap'],
-        values=[1, 1, 1, 3, 2, 5, 1, 5, 3],
+        labels=sunburst_data['artist'],
+        parents=sunburst_data['genres'],
+        # values=sunburst_data['values'],
     ))
+    # fig = go.Figure()
+    # fig.add_trace(go.Sunburst(
+    #     labels=['rock', 'rap', 'pop', 'Nirvana',
+    #             'J.Cole', 'Drake', 'Ed', 'Queen', 'Nick'],
+    #     parents=['', '', '', 'rock', 'rap', 'rap', 'pop', 'rock', 'rap'],
+    #     values=[1, 1, 1, 3, 2, 5, 1, 5, 3],
+    # ))
 
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
@@ -42,7 +42,7 @@ def sunburst():
 
 
 def create_top_artist_data(sp):
-    results = sp.current_user_top_artists(time_range='short_term', limit=50)
+    results = sp.current_user_top_artists(time_range='long_term', limit=50)
     genre = []
     names = []
     for item in results['items']:
@@ -70,16 +70,23 @@ def top_genres(df):
 
 
 def create_sunburst_data(df, top_genres):
+    # pdb.set_trace()
     genres, artists, values = [], [], []
     for i, row in df.iterrows():
-        for genre, value in zip(top_genres.index, top_genres.values):
+        for genre, value in top_genres.items():
             if genre in row['genres']:
                 genres.append(genre)
                 values.append(str(value))
                 artists.append(row['name'])
+                break
 
-    dataframe = pd.DataFrame()
-    dataframe['artist'] = artists
-    dataframe['genres'] = genres
-    dataframe['values'] = values
-    return dataframe
+    unique_genre = set(genres)
+    for g in unique_genre:
+        genres.append('')
+        artists.append(g)
+
+    df = pd.DataFrame()
+    df['artist'] = artists
+    df['genres'] = genres
+
+    return df

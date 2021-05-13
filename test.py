@@ -4,6 +4,7 @@ import pandas as pd
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime
 import pickle
+import pdb
 from git_ignore.config import *
 
 scope = 'user-top-read'
@@ -39,28 +40,39 @@ def top_genres(df):
                 genres_top_count[genre] = 1
             else:
                 genres_top_count[genre] += 1
-    genres_top_count = pd.Series(genres_top_count).sort_values(ascending=False)
-    return genres_top_count.head()
+    # genres_top_count = pd.Series(genres_top_count).sort_values(ascending=False)
+    genres_top_count = {k: v for k, v in sorted(
+        genres_top_count.items(), key=lambda item: item[1], reverse=True)}
+    return genres_top_count
 
 
 def create_sunburst_data(df, top_genres):
+    # pdb.set_trace()
     genres, artists, values = [], [], []
     for i, row in df.iterrows():
-        for genre, value in zip(top_genres.index, top_genres.values):
+        for genre, value in top_genres.items():
             if genre in row['genres']:
                 genres.append(genre)
                 values.append(str(value))
                 artists.append(row['name'])
+                break
 
-    dataframe = pd.DataFrame()
-    dataframe['artist'] = artists
-    dataframe['genres'] = genres
-    dataframe['values'] = values
-    return dataframe
+    unique_genre = set(genres)
+    for g in unique_genre:
+        genres.append('')
+        artists.append(g)
+
+    df = pd.DataFrame()
+    df['artist'] = artists
+    df['genres'] = genres
+
+    return df
 
 
 top_artist_df = create_top_artist_data(sp)
 top_genres_short = top_genres(top_artist_df)
 sunburst_data = create_sunburst_data(top_artist_df, top_genres_short)
 
+# print(top_artist_df)
+# print(top_genres_short)
 print(sunburst_data)

@@ -9,9 +9,15 @@ from pages.sunburst import sunburst_
 
 # Spotipy imports
 import time
-from git_ignore.config import *
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import os
+from os import environ
+# from git_ignore.config import *
+
+
+client_id = environ['CLIENT_ID']
+client_secret = environ['CLIENT_SECRET']
 
 app = Flask(__name__)
 # app.register_blueprint(recommend_, url_prefix="")

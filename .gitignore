@@ -1,4 +1,6 @@
-git_ignore/
+code/git_ignore/
 data/
-pickle/
+code/pages/pickle/
 .DS_Store
+*.pyc
+.ipynb_checkpoints

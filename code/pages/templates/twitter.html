@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flask Tweepy</title>
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+ <div class="row justify-content-center">
+   <div class="col-md-6">
+     <div class="p-5">
+       <form class="form-inline" method="GET" action="twitter">
+	 <input class="form-control" type="text" name="q">
+	 <button class="btn btn-primary" type="submit">search</button>
+       </form>
+     </div>
+	  {% for tweet in tweets %}
+	  <div class="card mt-2">
+	    <div class="card-body">
+	      <div class="card-text">
+		  {{ tweet._json.text }}
+	      </div>
+            </div>
+	  </div>
+	  {% endfor %}
+       </div>
+   </div>
+ </div>
+</body>
+</html>

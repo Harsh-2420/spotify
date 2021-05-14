@@ -5,6 +5,7 @@ from flask_session import Session
 # Blueprint imports
 # from pages.recommend import recommend_
 from pages.top import top_
+from pages.twitter import twitter_
 
 # Spotipy imports
 import time
@@ -21,9 +22,8 @@ client_secret = environ['CLIENT_SECRET']
 # client_secret = environ.get('CLIENT_SECRET')
 
 app = Flask(__name__)
-# app.register_blueprint(recommend_, url_prefix="")
 app.register_blueprint(top_, url_prefix="")
-# app.register_blueprint(sunburst_, url_prefix="")
+app.register_blueprint(twitter_, url_prefix="")
 
 app.secret_key = "spotty"
 sess = Session()

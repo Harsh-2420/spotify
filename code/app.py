@@ -5,7 +5,6 @@ from flask_session import Session
 # Blueprint imports
 # from pages.recommend import recommend_
 from pages.top import top_
-from pages.sunburst import sunburst_
 
 # Spotipy imports
 import time
@@ -18,11 +17,13 @@ from os import environ
 
 client_id = environ['CLIENT_ID']
 client_secret = environ['CLIENT_SECRET']
+# client_id = environ.get('CLIENT_ID')
+# client_secret = environ.get('CLIENT_SECRET')
 
 app = Flask(__name__)
 # app.register_blueprint(recommend_, url_prefix="")
 app.register_blueprint(top_, url_prefix="")
-app.register_blueprint(sunburst_, url_prefix="")
+# app.register_blueprint(sunburst_, url_prefix="")
 
 app.secret_key = "spotty"
 sess = Session()

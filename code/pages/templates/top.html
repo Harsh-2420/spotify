@@ -5,6 +5,7 @@
     <h6><a href="/">Return to index page</a></h6>
     <div id="chart" class="chart"></div>
     <div id="chart2" class="chart2"></div>
+    <div id="chart3" class="chart3"></div>
     <div>{{description}}</div>
 </body>
 
@@ -14,7 +15,10 @@
     Plotly.plot('chart',graphs,{});        
 
     var graphs2 = {{graphJSON2 | safe}};
-    Plotly.plot('chart2',graphs2,{});     
+    Plotly.plot('chart2',graphs2,{}); 
+    
+    var graphs3 = {{graphJSON3 | safe}};
+    Plotly.plot('chart3',graphs3,{}); 
       
 </script>
 </html>

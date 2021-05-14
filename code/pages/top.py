@@ -18,7 +18,9 @@ def top():
     top_tracks_df = get_top_tracks_data(sp)
     top_tracks_df = pd.DataFrame(top_tracks_df)
 
-    # genre_df = get_genres(sp)
+    top_artist_df = create_top_artist_data(sp)
+    top_genres_short = top_genres(top_artist_df)
+    sunburst_data = create_sunburst_data(top_artist_df, top_genres_short)
 
     popular_df = get_top_songs_over_release_date_vs_popularity(sp)
     hover_text = []
@@ -43,10 +45,10 @@ def top():
 
     fig = go.Figure()
     fig.add_trace(go.Table(
-        header=dict(values=['long_term', 'medium_term', 'short_term', 'date'],
+        header=dict(values=['long_term', 'medium_term', 'short_term'],
                     fill_color='paleturquoise',
                     align='left'),
-        cells=dict(values=[top_tracks_df.long_term, top_tracks_df.medium_term, top_tracks_df.short_term, popular_df.release_date],
+        cells=dict(values=[top_tracks_df.long_term, top_tracks_df.medium_term, top_tracks_df.short_term],
                    fill_color='lavender',
                    align='left'))
                   )
@@ -77,25 +79,21 @@ def top():
         plot_bgcolor='rgb(243, 243, 243)',
     )
 
-    # fig3 = px.sunburst(genre_df, path=['parent_genre', 'artist_name_list'])
-    # fig3 = go.Figure()
-    # fig3.add_trace(go.Table(
-    #     header=dict(values=genre_df.columns,
-    #                 fill_color='paleturquoise',
-    #                 align='left'),
-    #     cells=dict(values=[genre_df.parent_genre, genre_df.artist_name_list],
-    #                fill_color='lavender',
-    #                align='left')
-    # ))
+    fig3 = go.Figure()
+    fig3.add_trace(go.Sunburst(
+        labels=sunburst_data['artist'],
+        parents=sunburst_data['genres'],
+    ))
+    fig3.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
-    # graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
     header = "Get top tweets based on a keyword"
     description = """
     Use a given keyword to get most popular tweets. Give option for recent and custom keyword
     """
-    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, header=header, description=description)
+    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3, header=header, description=description)
 
 
 def get_top_tracks_data(sp):
@@ -104,7 +102,7 @@ def get_top_tracks_data(sp):
     for sp_range in ranges:
         tracks[sp_range] = []
         results = sp.current_user_top_tracks(
-            time_range=sp_range, limit=30, offset=0)
+            time_range=sp_range, limit=50, offset=0)
         for i, item in enumerate(results['items']):
             val = item['artists'][0]['name']
             tracks[sp_range].append(val)
@@ -119,7 +117,7 @@ def get_top_songs_over_release_date_vs_popularity(sp):
     song_duration = []
     artist_name = []
 
-    results = sp.current_user_top_tracks(time_range="long_term", limit=30)
+    results = sp.current_user_top_tracks(time_range="long_term", limit=50)
     for i, item in enumerate(results['items']):
         song_name.append(item['name'])
         date = sp.album(item["album"]["external_urls"]["spotify"])[
@@ -146,27 +144,52 @@ def get_top_songs_over_release_date_vs_popularity(sp):
     return df
 
 
-# def get_genres(sp):
-#     parent_genre = []
-#     artist_name_list = []
-#     results = sp.current_user_top_tracks(time_range='short_term', limit=50)
-#     for i, item in enumerate(results['items']):
-#         artist_name = item['artists'][0]['name']
-#         search = sp.search(artist_name)
-#         track = search['tracks']['items'][0]
-#         artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
-#         genre_list = artist['genres']
-#         top_genres = get_top_genres()
-#         for genre in top_genres:
-#             if len(genre_list) > 0:
-#                 if genre in genre_list:
-#                     parent_genre.append(genre)
-#                     artist_name_list.append(artist_name)
-#     genre_df = pd.DataFrame()
-#     genre_df['parent_genre'] = parent_genre
-#     genre_df['artist_name_list'] = artist_name_list
-#     return genre_df
-# def get_top_genres():
-#     with open('./pickle/top_genres.pkl', 'rb') as handle:
-#         top_genres = pickle.load(handle)
-#     return top_genres
+def create_top_artist_data(sp):
+    results = sp.current_user_top_artists(time_range='long_term', limit=100)
+    genre = []
+    names = []
+    for item in results['items']:
+        if item['genres'] == []:
+            continue
+        else:
+            genre.append(item['genres'])
+            names.append(item['name'])
+    df = pd.DataFrame()
+    df['genres'] = genre
+    df['name'] = names
+    return df
+
+
+def top_genres(df):
+    genres_top_count = {}
+    for genre_list in df['genres']:
+        for genre in genre_list:
+            if genre not in genres_top_count:
+                genres_top_count[genre] = 1
+            else:
+                genres_top_count[genre] += 1
+    genres_top_count = pd.Series(genres_top_count).sort_values(ascending=False)
+    return genres_top_count.head()
+
+
+def create_sunburst_data(df, top_genres):
+    # pdb.set_trace()
+    genres, artists, values = [], [], []
+    for i, row in df.iterrows():
+        for genre, value in top_genres.items():
+            if genre in row['genres']:
+                genres.append(genre)
+                values.append(str(value))
+                artists.append(row['name'])
+                break
+
+    unique_genre = set(genres)
+    for g in unique_genre:
+        genres.append('')
+        artists.append(g)
+
+    df = pd.DataFrame()
+    df['artist'] = artists
+    df['genres'] = genres
+
+    return df

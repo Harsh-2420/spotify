@@ -102,7 +102,7 @@ def get_top_tracks_data(sp):
     for sp_range in ranges:
         tracks[sp_range] = []
         results = sp.current_user_top_tracks(
-            time_range=sp_range, limit=50, offset=0)
+            time_range=sp_range, limit=30, offset=0)
         for i, item in enumerate(results['items']):
             val = item['artists'][0]['name']
             tracks[sp_range].append(val)

@@ -35,6 +35,14 @@
 									</div>
 								</div>
 							{% endfor %}
+							<br><br>
+							The sentiments about {{key}} on Twitter:
+							<br><br>
+							{% for sentiment in sentiments %}
+								{{sentiment[0]}}:
+								{{sentiment[1]}} %
+								<br>
+							{% endfor %}
 						{% else %}
 							Your timeline:
 							{% for tweet in tweets %}

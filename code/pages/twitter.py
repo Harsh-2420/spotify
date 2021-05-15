@@ -5,6 +5,9 @@ import tweepy
 import json
 from datetime import datetime
 from os import environ
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import re
+
 
 twitter_ = Blueprint('twitter', __name__, template_folder='templates')
 
@@ -24,11 +27,74 @@ def twitter():
     num = request.args.get('num')
     if key == None:
         iteration = 0
-        # public_tweets = api.user_timeline()
         public_tweets = tweepy.Cursor(api.user_timeline).items(15)
         return render_template('twitter.html', tweets=public_tweets, iteration=iteration)
     else:
+        if not isinstance(key, str):
+            try:
+                public_tweets = tweepy.Cursor(api.user_timeline).items(num)
+            except:
+                public_tweets = tweepy.Cursor(api.user_timeline).items(10)
+            return render_template('twitter.html', tweets=public_tweets, iteration=0)
         iteration = 1
-        public_tweets = tweepy.Cursor(api.search, q=key,
-                                      result_type='popular').items(int(num))
-        return render_template('twitter.html', tweets=public_tweets, iteration=iteration, key=key)
+        try:
+            public_tweets = tweepy.Cursor(api.search, q=key,
+                                          result_type='popular').items(int(num))
+        except:
+            public_tweets = tweepy.Cursor(api.search, q=key,
+                                          result_type='popular').items(int(10))
+        sentiments = get_sentiment(api, key)
+        return render_template('twitter.html', tweets=public_tweets, iteration=iteration, key=key, sentiments=sentiments)
+
+
+def clean(tweet):
+    tweet = re.sub(r'^RT[\s]+', '', tweet)
+    tweet = re.sub(r'https?:\/\/.*[\r\n]*', '', tweet)
+    tweet = re.sub(r'#', '', tweet)
+    tweet = re.sub(r'@[A-Za-z0–9]+', '', tweet)
+    return tweet
+
+
+def get_sentiment(api, key):
+
+    tweet_limit = 100
+    keyword = key
+    tweets = tweepy.Cursor(api.search, q=keyword,
+                           result_type='popular').items(tweet_limit)
+    tweet_list = []
+    negative_list = []
+    neutral_list = []
+    positive_list = []
+    positive = 0
+    negative = 0
+    neutral = 0
+    for tweet in tweets:
+        text = tweet.text
+        text = clean(text)
+        tweet_list.append(text)
+        score = SentimentIntensityAnalyzer().polarity_scores(text)
+        neg = score['neg']
+        pos = score['pos']
+        if neg > pos:
+            negative_list.append(text)
+            negative += 1
+        elif pos > neg:
+            positive_list.append(text)
+            positive += 1
+
+        elif pos == neg:
+            neutral_list.append(text)
+            neutral += 1
+    positive = round(percentage(positive, len(tweet_list)))
+    negative = round(percentage(negative, len(tweet_list)))
+    neutral = round(percentage(neutral, len(tweet_list)))
+    positive = format(positive, '.1f')
+    negative = format(negative, '.1f')
+    neutral = format(neutral, '.1f')
+    results = [["positive", positive], [
+        'negative', negative], ['neutral', neutral]]
+    return results
+
+
+def percentage(part, whole):
+    return 100 * float(part)/float(whole)

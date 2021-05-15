@@ -4,5 +4,6 @@ code/pages/pickle/
 .DS_Store
 *.pyc
 .ipynb_checkpoints
-.cache
 *.env
+code/jupyter/git_ignore/
+*.cache

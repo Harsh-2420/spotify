@@ -22,9 +22,11 @@ def twitter():
     api = tweepy.API(auth)
     key = request.args.get('key')
     if key == None:
+        iteration = 0
         public_tweets = api.user_timeline()
-        return render_template('twitter.html', tweets=public_tweets)
+        return render_template('twitter.html', tweets=public_tweets, iteration=iteration)
     else:
+        iteration = 1
         public_tweets = tweepy.Cursor(api.search, q=key,
                                       result_type='popular').items(10)
-        return render_template('twitter.html', tweets=public_tweets)
+        return render_template('twitter.html', tweets=public_tweets, iteration=iteration)

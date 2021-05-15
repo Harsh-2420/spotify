@@ -13,18 +13,32 @@
 	 <input class="form-control" type="text" name="key">
 	 <button class="btn btn-primary" type="submit">search</button>
        </form>
-	   {{key}}
+	   <!-- {{key}} -->
      </div>
-		{% for tweet in tweets %}
-			<div class="card mt-2">
-				<div class="card-body">
-					<div class="card-text">
-						{{ tweet.text }}
+		{% if iteration == 1%}
+	 		Trending tweets:
+			{% for tweet in tweets %}
+				<div class="card mt-2">
+					<div class="card-body">
+						<div class="card-text">
+							{{ tweet.text }}
+						</div>
 					</div>
 				</div>
-			</div>
-		{% endfor %}
-       </div>
+			{% endfor %}
+		{% else %}
+			Your timeline:
+			{% for tweet in tweets %}
+				<div class="card mt-2">
+					<div class="card-body">
+						<div class="card-text">
+							{{ tweet.text }}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+		</div>
    </div>
  </div>
 </body>

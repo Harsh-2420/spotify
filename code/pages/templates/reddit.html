@@ -1,13 +1,26 @@
 <!doctype html>
 <html>
-<body style="font-family:arial, sans-serif">
-    <h1>Reddit</h1>
-    <h6><a href="/">Return to index page</a></h6>
-    <div> Find out how popular your favorite artists are on Reddit!</div>
-    <h4>Interact with the plot:</h4>
-    <p>Click an Artist to toggle them and double click to toggle all. Zoom in and out of the plot or pan around. Check out other features on the top right corner of the plot! </p>
-    <div id="chart" class="chart"></div>
-</body>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    </head>
+    <body style="font-family:arial, sans-serif">
+        <h1>Reddit</h1>
+        <h6><a href="/">Return to index page</a></h6>
+        <div> Find out how popular your favorite artists are on Reddit!</div>
+        <h4>Interact with the plot:</h4>
+        <p>Click an Artist to toggle them and double click to toggle all. Zoom in and out of the plot or pan around. Check out other features on the top right corner of the plot! </p>
+        <div id="chart" class="chart"></div>
+        
+        
+        <!-- <div class="p-5">
+            <div class="block">
+                <form class="form-inline" method="GET" action="reddit">
+                    <input placeholder="Aritst Name" class="form-control" type="text" name="key"><br><br>            
+                    <button class="btn btn-primary" type="submit">search</button>
+                </form>
+            </div>
+        </div> -->
+    </body>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">

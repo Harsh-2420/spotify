@@ -21,10 +21,10 @@ def twitter():
     auth.set_access_token(twitter_access_token, twitter_access_token_secret)
     api = tweepy.API(auth)
     key = request.args.get('key')
-    try:
+    if key == None:
+        public_tweets = api.user_timeline()
+        return render_template('twitter.html', tweets=public_tweets)
+    else:
         public_tweets = tweepy.Cursor(api.search, q=key,
                                       result_type='popular').items(10)
-        return render_template('twitter.html', tweets=public_tweets)
-    except:
-        public_tweets = api.user_timeline(key)
         return render_template('twitter.html', tweets=public_tweets)

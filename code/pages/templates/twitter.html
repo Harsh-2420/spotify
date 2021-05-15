@@ -4,42 +4,51 @@
 	<title>Flask Tweepy</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
-<body>
-<div class="container">
- <div class="row justify-content-center">
-   <div class="col-md-6">
-     <div class="p-5">
-       <form class="form-inline" method="GET" action="twitter">
-	 <input class="form-control" type="text" name="key">
-	 <button class="btn btn-primary" type="submit">search</button>
-       </form>
-	   <!-- {{key}} -->
-     </div>
-		{% if iteration == 1%}
-	 		Trending tweets:
-			{% for tweet in tweets %}
-				<div class="card mt-2">
-					<div class="card-body">
-						<div class="card-text">
-							{{ tweet.text }}
-						</div>
+	<body>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6">
+					<div class="p-5">
+						<form class="form-inline" method="GET" action="twitter">
+							
+							<label for="fname">Artist name:</label><br>
+							<input class="form-control" type="text" name="key">
+							
+							<label for="fname">Number of tweets:</label><br>
+							<input class="form-control" type="number" id="rec" name="num" min="1" max="30">
+							
+							
+							<button class="btn btn-primary" type="submit">search</button>
+						</form>
+					<!-- {{key}} -->
+					</div>
+					<div>
+						{% if iteration == 1%}
+							Trending tweets on {{key}}:
+							{% for tweet in tweets %}
+								<div class="card mt-2">
+									<div class="card-body">
+										<div class="card-text">
+											{{ tweet.text }}
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						{% else %}
+							Your timeline:
+							{% for tweet in tweets %}
+								<div class="card mt-2">
+									<div class="card-body">
+										<div class="card-text">
+											{{ tweet.text }}
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						{% endif %}
 					</div>
 				</div>
-			{% endfor %}
-		{% else %}
-			Your timeline:
-			{% for tweet in tweets %}
-				<div class="card mt-2">
-					<div class="card-body">
-						<div class="card-text">
-							{{ tweet.text }}
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-		{% endif %}
+			</div>
 		</div>
-   </div>
- </div>
-</body>
+	</body>
 </html>

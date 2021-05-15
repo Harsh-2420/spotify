@@ -10,19 +10,19 @@
    <div class="col-md-6">
      <div class="p-5">
        <form class="form-inline" method="GET" action="twitter">
-	 <input class="form-control" type="text" name="q">
+	 <input class="form-control" type="text" name="key">
 	 <button class="btn btn-primary" type="submit">search</button>
        </form>
      </div>
-	  {% for tweet in tweets %}
-	  <div class="card mt-2">
-	    <div class="card-body">
-	      <div class="card-text">
-		  {{ tweet._json.text }}
-	      </div>
-            </div>
-	  </div>
-	  {% endfor %}
+		{% for tweet in tweets %}
+			<div class="card mt-2">
+				<div class="card-body">
+					<div class="card-text">
+						{{ tweet.text }}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
        </div>
    </div>
  </div>

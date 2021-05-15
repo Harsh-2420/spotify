@@ -20,8 +20,11 @@ def twitter():
     auth = tweepy.OAuthHandler(twitter_consumer_key, twitter_consumer_secret)
     auth.set_access_token(twitter_access_token, twitter_access_token_secret)
     api = tweepy.API(auth)
-    search = request.args.get('q')
-    public_tweets = api.user_timeline(search)
-    # tweets = tweepy.Cursor(api.search, q='Drake',
-    #                        result_type='popular').items(10)
-    return render_template('twitter.html', tweets=public_tweets)
+    key = request.args.get('key')
+    try:
+        public_tweets = tweepy.Cursor(api.search, q=key,
+                                      result_type='popular').items(10)
+        return render_template('twitter.html', tweets=public_tweets)
+    except:
+        public_tweets = api.user_timeline(key)
+        return render_template('twitter.html', tweets=public_tweets)

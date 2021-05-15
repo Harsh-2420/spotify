@@ -27,10 +27,10 @@ def reddit():
 
     fig = px.scatter(
         df.query('platform==1'),
-        x="date", y="score",
-        size="total comments",
-        color="artist",
-        hover_name="title")
+        x="Date Created", y="Number of Upvotes",
+        size="Total Comments on post",
+        color="Artist Name",
+        hover_name="Title")
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return render_template('reddit.html', graphJSON=graphJSON)
@@ -50,7 +50,7 @@ def get_reddit_top_artist_data(sp, reddit_obj):
     author = []
     comments = []
     date = []
-    score = []
+    upvotes = []
     platform = []
     artist = []
     for key, val in d.items():
@@ -63,18 +63,18 @@ def get_reddit_top_artist_data(sp, reddit_obj):
                 author.append(sub.author)
                 comments.append(sub.num_comments)
                 date.append(time)
-                score.append(sub.score)
+                upvotes.append(sub.score)
                 platform.append(1)
                 artist.append(key)
         except:
             continue
 
     df['post_id'] = id_list
-    df['title'] = title
-    df['author'] = author
-    df['total comments'] = comments
-    df['date'] = date
-    df['score'] = score
+    df['Title'] = title
+    df['Author'] = author
+    df['Total Comments on post'] = comments
+    df['Date Created'] = date
+    df['Number of Upvotes'] = upvotes
     df['platform'] = platform
-    df['artist'] = artist
+    df['Artist Name'] = artist
     return df

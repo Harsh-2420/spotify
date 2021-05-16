@@ -1,9 +1,9 @@
 code/git_ignore/
 data/
-code/pages/pickle/
 .DS_Store
 *.pyc
 .ipynb_checkpoints
 *.env
 code/jupyter/git_ignore/
 *.cache
+/code/pages/pickle/

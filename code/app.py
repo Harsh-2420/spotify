@@ -3,7 +3,7 @@ from flask import Flask, request, url_for, redirect, session, render_template
 from flask_session import Session
 
 # Blueprint imports
-# from pages.recommend import recommend_
+from pages.recommend import recommend_
 from pages.top import top_
 from pages.twitter import twitter_
 from pages.reddit import reddit_

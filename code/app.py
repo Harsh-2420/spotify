@@ -7,6 +7,7 @@ from flask_session import Session
 from pages.top import top_
 from pages.twitter import twitter_
 from pages.reddit import reddit_
+from pages.spotify_rec import spotify_rec_
 
 # Spotipy imports
 import time
@@ -24,6 +25,7 @@ app = Flask(__name__)
 app.register_blueprint(top_, url_prefix="")
 app.register_blueprint(twitter_, url_prefix="")
 app.register_blueprint(reddit_, url_prefix="")
+app.register_blueprint(spotify_rec_, url_prefix="")
 # app.register_blueprint(recommend_, url_prefix="")
 
 app.secret_key = "spotty"

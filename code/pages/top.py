@@ -89,10 +89,8 @@ def top():
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
-    header = "Get top tweets based on a keyword"
-    description = """
-    Use a given keyword to get most popular tweets. Give option for recent and custom keyword
-    """
+    header = 'Data on your favorite artists'
+    description = ''
     return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3, header=header, description=description)
 
 

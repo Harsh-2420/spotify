@@ -2,6 +2,8 @@ from flask import render_template, Blueprint, current_app
 import numpy as np
 import pandas as pd
 import math
+
+from pandas.core.indexes import base
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
@@ -18,10 +20,10 @@ def spotify_rec():
 
     fig = go.Figure()
     fig.add_trace(go.Table(
-        header=dict(values=['name', 'popularity', 'followers', 'genres'],
+        header=dict(values=['Name', 'Popularity', 'Total Followers', 'Recommendation Based On', 'Genres'],
                     fill_color='paleturquoise',
                     align='left'),
-        cells=dict(values=[df.name, df.popularity, df.followers, df.genres],
+        cells=dict(values=[df.name, df.popularity, df.followers, df.based_on, df.genres],
                    fill_color='lavender',
                    align='left'))
                   )
@@ -38,7 +40,9 @@ def create_related_artist_df(sp):
     popularity = []
     genres = []
     followers = []
+    based_on = []
     for item in results['items']:
+        based_on.append(item['name'])
         top_id = item['id']
         recs = sp.artist_related_artists(top_id)
         for rec in recs['artists']:
@@ -51,6 +55,6 @@ def create_related_artist_df(sp):
     df['popularity'] = popularity
     df['genres'] = genres
     df['followers'] = followers
-    # df.drop_duplicates(subset='genres', keep='first')
-    df.loc[df.astype(str).drop_duplicates(subset='genres', keep='first').index]
+    df['based_on'] = based_on
+    # df.loc[df.astype(str).drop_duplicates(subset='genres', keep='first').index]
     return df

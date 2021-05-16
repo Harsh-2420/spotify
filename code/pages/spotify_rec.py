@@ -42,10 +42,12 @@ def create_related_artist_df(sp):
     followers = []
     based_on = []
     for item in results['items']:
-        based_on.append(item['name'])
+
         top_id = item['id']
         recs = sp.artist_related_artists(top_id)
+
         for rec in recs['artists']:
+            based_on.append(item['name'])
             name.append(rec['name'])
             popularity.append(rec['popularity'])
             genres.append(rec['genres'])

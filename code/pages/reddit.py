@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 import json
 from datetime import datetime
 from os import environ
+import os
 
 reddit_ = Blueprint('reddit', __name__, template_folder='templates')
 
@@ -137,6 +138,9 @@ def get_reddit_top_artist_data(names, reddit_obj):
     df['platform'] = platform
     df['Artist Name'] = artist
     return df
+
+
+
 
 
 def get_new_df(key, reddit_obj):

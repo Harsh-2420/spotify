@@ -43,6 +43,11 @@ def login():
     return redirect(auth_url)
 
 
+@app.errorhandler(404)
+def error404(error):
+    return "A known bug is preventing the app from loading. Try refreshing the page (probably several times) or come back later. Sorry!"
+
+
 @app.route('/redirect')
 def redirectPage():
     sp_oauth = create_spotify_ouath()

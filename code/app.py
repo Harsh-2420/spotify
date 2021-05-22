@@ -45,7 +45,12 @@ def login():
 
 @app.errorhandler(404)
 def error404(error):
-    return "A known bug is preventing the app from loading. Try refreshing the page (probably several times) or come back later. Sorry!"
+    return "A known bug is preventing the app from loading. Try going back to the home page and reloading or come back later. Sorry!", 404
+
+
+@app.errorhandler(500)
+def error500(error):
+    return "A known bug is preventing the app from loading. Try going back to the home page and reloading or come back later. Sorry!", 500
 
 
 @app.route('/redirect')

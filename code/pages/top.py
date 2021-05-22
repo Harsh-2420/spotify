@@ -67,7 +67,6 @@ def top():
         xaxis=dict(
             title='Release Date',
             gridcolor='white',
-            # type='',
             gridwidth=2,
         ),
         yaxis=dict(

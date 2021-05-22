@@ -24,36 +24,42 @@
 					<!-- {{key}} -->
 					</div>
 					<div>
-						{% if iteration == 1%}
-							Trending tweets on {{key}}:
-							{% for tweet in tweets %}
-								<div class="card mt-2">
-									<div class="card-body">
-										<div class="card-text">
-											{{ tweet.text }}
+						{% if sentiments == 'error' %}
+							Trending tweets not found. Try another artist
+						{%else%}
+							{% if iteration == 1%}
+								Trending tweets on {{key}}:
+								{% for tweet in tweets %}
+									<div class="card mt-2">
+										<div class="card-body">
+											<div class="card-text">
+												{{ tweet.text }}
+											</div>
 										</div>
 									</div>
-								</div>
-							{% endfor %}
-							<br><br>
-							The sentiments about {{key}} on Twitter:
-							<br><br>
-							{% for sentiment in sentiments %}
-								{{sentiment[0]}}:
-								{{sentiment[1]}} %
+								{% endfor %}
+								<br><br>
+								The sentiments about {{key}} on Twitter:
+								<br><br>
+
+								{% for sentiment in sentiments %}
+									{{sentiment[0]}}:
+									{{sentiment[1]}} %
 								<br>
-							{% endfor %}
-						{% else %}
-							Your timeline:
-							{% for tweet in tweets %}
-								<div class="card mt-2">
-									<div class="card-body">
-										<div class="card-text">
-											{{ tweet.text }}
+								{% endfor %}
+
+							{% else %}
+								Your timeline:
+								{% for tweet in tweets %}
+									<div class="card mt-2">
+										<div class="card-body">
+											<div class="card-text">
+												{{ tweet.text }}
+											</div>
 										</div>
 									</div>
-								</div>
-							{% endfor %}
+								{% endfor %}
+							{% endif %}
 						{% endif %}
 					</div>
 				</div>

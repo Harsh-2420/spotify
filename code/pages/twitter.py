@@ -85,15 +85,18 @@ def get_sentiment(api, key):
         elif pos == neg:
             neutral_list.append(text)
             neutral += 1
-    positive = round(percentage(positive, len(tweet_list)))
-    negative = round(percentage(negative, len(tweet_list)))
-    neutral = round(percentage(neutral, len(tweet_list)))
-    positive = format(positive, '.1f')
-    negative = format(negative, '.1f')
-    neutral = format(neutral, '.1f')
-    results = [["positive", positive], [
-        'negative', negative], ['neutral', neutral]]
-    return results
+    if tweet_list:
+        positive = round(percentage(positive, len(tweet_list)))
+        negative = round(percentage(negative, len(tweet_list)))
+        neutral = round(percentage(neutral, len(tweet_list)))
+        positive = format(positive, '.1f')
+        negative = format(negative, '.1f')
+        neutral = format(neutral, '.1f')
+        results = [["positive", positive], [
+            'negative', negative], ['neutral', neutral]]
+        return results
+    else:
+        return 'error'
 
 
 def percentage(part, whole):

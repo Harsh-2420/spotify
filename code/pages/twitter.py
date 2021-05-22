@@ -27,14 +27,17 @@ def twitter():
     num = request.args.get('num')
     if key == None:
         iteration = 0
-        public_tweets = tweepy.Cursor(api.user_timeline).items(15)
+        public_tweets = tweepy.Cursor(api.search, q='World',
+                                      result_type='popular').items(int(10))
         return render_template('twitter.html', tweets=public_tweets, iteration=iteration)
     else:
         if not isinstance(key, str):
             try:
-                public_tweets = tweepy.Cursor(api.user_timeline).items(num)
+                public_tweets = tweepy.Cursor(api.search, q='World',
+                                              result_type='popular').items(int(10))
             except:
-                public_tweets = tweepy.Cursor(api.user_timeline).items(10)
+                public_tweets = tweepy.Cursor(api.search, q='World',
+                                              result_type='popular').items(int(10))
             return render_template('twitter.html', tweets=public_tweets, iteration=0)
         iteration = 1
         try:

@@ -117,8 +117,8 @@ def get_top_songs_over_release_date_vs_popularity(sp):
     results = sp.current_user_top_tracks(time_range="long_term", limit=50)
     for i, item in enumerate(results['items']):
         name = item['name']
-        if math.isnan(name):
-            name = 'No Name'
+        # if math.isnan(name):
+        #     name = 'No Name'
         song_name.append(name)
         date = sp.album(item["album"]["external_urls"]["spotify"])[
             'release_date']

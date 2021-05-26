@@ -50,27 +50,7 @@
             <p class="masthead-subheading font-weight-light mb-0">Spotify Visualisation - Recommendations - NLP Sentiment Analysis</p>
         </div>
     </header>
-    <section class="intro text-center section-padding color-bg" id="about">
-        <div class="container">
-          <!-- WELCOME TEXT -->
-          <div class="row">
-            <div class="col-md-8 col-md-offset-2 wp1">
-              <h1 class="arrow">A little <span>about</span> me</h1><!-- Headline -->
-              <!-- about / welcome text -->
-              <p>I'm an entrepreneur, a tech head and an aspiring Data Scientist
-                <br />- <br />I love having control (I mean who doesn't). This
-                website for example - I control the design and the architecture.
-                For my projects, I try to streamline the process to make the
-                different teams work in tandem.
-                <br />
-                This is what draws me towards data. Working with big data provides
-                the kind of control I like. The feeling of being overwhelmed by
-                millions of datapoints and making sense of it. Manipulating it and
-                visualising it to make algorithms - It makes me feel alive!</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
     <!-- Portfolio Section-->
     <section class="page-section portfolio" id="portfolio">
         <div class="container">
@@ -153,6 +133,37 @@
                         <img class="img-fluid" src="{{ url_for('static', filename='img/safe.png') }}" alt="..." />
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <!-- About Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- About Section Content-->
+            <div class="row">
+                <div class="col-lg-4 ms-auto"><p class="lead"> Spotty is a personal project I am working on to improve my skills in Data Engineering and sentiment analysis. This is still a work in progress and if you run into any bugs or have suggestions, contact me below! I would love to improve this website. </p></div>
+                <div class="col-lg-4 me-auto"><p class="lead">I am working on adding more features like:
+                        <ul>
+                            <li>Improving the Recommendation System
+                                <ul>
+                                    <li>Audio Waveform Analysis using parallel CNN-RNN architecture</li>
+                                    <li>NLP on the song lyrics to identify user favorites</li>
+                                </ul>
+                            </li>
+                            <li>Custom inputs for Reddit Visualisation</li>
+                            <li>Making the pages load more efficiently</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="col-lg-4 me-auto"><p class="lead">Check out the <u><a style="color: white" href="https://harsh-j.medium.com/spotty-music-analytics-798010883cc1">Medium</a></u> articles to learn more about the deployment process of this project!</p></div>
             </div>
         </div>
     </section>

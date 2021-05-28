@@ -27,30 +27,32 @@ flask run
 4. Go to localhost:5000
 
 
-## Tasks
+</br>
 
-Variables using the API:
+## Project Details
 
-- genres and popularity (for artists)
-- artists, loudness, tempo, valence, popularity, acousticness, danceability, etc (for tracks)
+Data Points Used:
 
-I have performed the following tasks on this dataset:
+- Artist Data (like, genres, popularity, etc)
+- Track Data (like, loudness, tempo, valence, etc)
+
+I have performed the following tasks using the extracted data:
 Task 1:
-- Data Analysis and Visualisation on the dataset
+- Data Analysis and Visualisation with data since 1922.
 - Time Series Analysis of the most popular artists and tracks
 
 Task 2:
-- Building a recommendation model using content based recommendation
--  This model takes an artist as an input and recommends other artists similar to the input
--  Task 2a:
-  -  Expanded the model to take in multiple artists with different weights and recommend based on these weights.
--  Task 2b:
-  -  Built the model using Flask and deployed it on Heroku.
+- Building a content-based recommendation system to recommend artists to users
+- Deployed this model using Flask and Heroku.
 
-### In Progress
 Task 3:
-- Building a recommendation model that can take a song as an input and recommend similar songs.
-- Expanding this model to take several songs as input.
+- Generating unique insights about each user's Spotify history and displaying them using Plotly.
+- Performed ETL on Reddit and Twitter API to get data from artists and display popularity on social media.
 
 Task 4:
-- Connect to the Spotify API so that the model can read in a user's frequented artists/songs and recommend new ones.
+- Built a front-end UI for the project 
+- Created an entire data pipeline and performed cron jobs while using MongoDB
+
+### In Progress
+Task 5:
+- Improvements to the recommendation system by adding NLP and Audio Recognition using parallel CNN-RNN.

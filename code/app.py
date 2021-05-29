@@ -1,7 +1,7 @@
 # Flask imports
 from flask import Flask, request, url_for, redirect, session, render_template
 from flask_session import Session
-from extensions import mongo
+from flask_pymongo import PyMongo
 
 # Blueprint imports
 # from pages.recommend import recommend_
@@ -22,7 +22,7 @@ from os import environ
 
 client_id = environ['CLIENT_ID']
 client_secret = environ['CLIENT_SECRET']
-mongo_uri = environ['MONGO_URI']
+# mongo_uri = environ['MONGO_URI']
 
 app = Flask(__name__)
 app.register_blueprint(top_, url_prefix="")
@@ -33,8 +33,10 @@ app.register_blueprint(spotify_rec_, url_prefix="")
 app.register_blueprint(user_collection_, url_prefix="")
 # app.register_blueprint(recommend_, url_prefix="")
 
-app.config['MONGO_URI'] = mongo_uri
-mongo.init_app(app)
+# app.config['MONGO_URI'] = mongo_uri
+app.config['MONGO_URI'] = 'mongodb+srv://admin:asdfgh09@cluster0.h6kse.mongodb.net/spotty?retryWrites=true&w=majority'
+mongo = PyMongo(app)
+
 
 app.secret_key = "spotty"
 sess = Session()

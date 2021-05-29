@@ -1,6 +1,7 @@
 # Flask imports
 from flask import Flask, request, url_for, redirect, session, render_template
 from flask_session import Session
+from extensions import mongo
 
 # Blueprint imports
 # from pages.recommend import recommend_
@@ -9,6 +10,7 @@ from pages.twitter import twitter_
 from pages.twitter_top import twitter_top_
 from pages.reddit import reddit_
 from pages.spotify_rec import spotify_rec_
+from pages.user_collection import user_collection_
 
 # Spotipy imports
 import time
@@ -16,11 +18,11 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import os
 from os import environ
-# from git_ignore.config import *
 
 
 client_id = environ['CLIENT_ID']
 client_secret = environ['CLIENT_SECRET']
+mongo_uri = environ['MONGO_URI']
 
 app = Flask(__name__)
 app.register_blueprint(top_, url_prefix="")
@@ -28,11 +30,15 @@ app.register_blueprint(twitter_, url_prefix="")
 app.register_blueprint(twitter_top_, url_prefix="")
 app.register_blueprint(reddit_, url_prefix="")
 app.register_blueprint(spotify_rec_, url_prefix="")
+app.register_blueprint(user_collection_, url_prefix="")
 # app.register_blueprint(recommend_, url_prefix="")
+
+app.config['MONGO_URI'] = mongo_uri
+mongo.init_app(app)
 
 app.secret_key = "spotty"
 sess = Session()
-app.config['SESSION_COOKIE_NAME'] = "JJ Cookie"
+app.config['SESSION_COOKIE_NAME'] = "Spotty Cookie"
 TOKEN_INFO = "token_i"
 
 

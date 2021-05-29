@@ -1,14 +1,4 @@
-from flask import render_template, Blueprint, current_app, request
-import numpy as np
-import pandas as pd
-import tweepy
-import plotly
-import plotly.express as px
-import plotly.graph_objects as go
-import json
-from datetime import datetime
-from os import environ
-import re
+from flask import render_template, Blueprint, request, current_app
 
 
 user_collection_ = Blueprint(
@@ -18,4 +8,10 @@ user_collection_ = Blueprint(
 @user_collection_.route('/user_collection')
 def user_collection():
     key = request.args.get('key')
-    return render_template('user_collection.html')
+    if key == None:
+        return render_template('user_collection.html')
+    else:
+        mongo = current_app.config['mongo']
+        collection = mongo.db.spotty_user_collection
+        collection.insert_one({'track': key})
+        return render_template('user_collection.html')

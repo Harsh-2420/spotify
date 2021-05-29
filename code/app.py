@@ -36,7 +36,7 @@ app.register_blueprint(user_collection_, url_prefix="")
 # app.config['MONGO_URI'] = mongo_uri
 app.config['MONGO_URI'] = 'mongodb+srv://admin:asdfgh09@cluster0.h6kse.mongodb.net/spotty?retryWrites=true&w=majority'
 mongo = PyMongo(app)
-
+app.config['mongo'] = mongo
 
 app.secret_key = "spotty"
 sess = Session()

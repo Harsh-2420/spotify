@@ -36,20 +36,21 @@ def user_collection():
 
 def plot_scatter(track_df):
     hover_text = []
-    # bubble_size = []
+    bubble_size = []
 
     for index, row in track_df.iterrows():
         hover_text.append(('song name: {country}<br>' +
-                           'count: {lifeExp}<br>' +
+                           'artist: {lifeExp}<br>' +
                            'release: {gdp}<br>' +
-                           'artist: {year}').format(country=row['song_name'],
-                                                    lifeExp=row['count'],
-                                                    gdp=row['suggested_date'],
-                                                    year=row['artist_name']))
+                           'count: {year}').format(country=row['song_name'],
+                                                   lifeExp=row['artist_name'],
+                                                   gdp=row['suggested_date'],
+                                                   year=row['count']))
         # bubble_size.append(math.sqrt(row['song_duration']))
+        # bubble_size.append(100)
     track_df['text'] = hover_text
     # track_df['size'] = bubble_size
-    # sizeref = 2.*max(track_df['size'])/(100**2)
+    # sizeref = 2.*max(track_df['size'])
     d = dict(tuple(track_df.groupby('artist_name')))
 
     fig2 = go.Figure()
@@ -89,7 +90,7 @@ def update_db(collection, track, artist, curr_time):
     count = query.count()
     if count == 0:
         collection.insert_one({'track': track, 'artist': artist, 'time': curr_time,
-                              'track_check': track.lower(), 'artist_check': artist.lower(), 'count': count})
+                              'track_check': track.lower(), 'artist_check': artist.lower(), 'count': 1})
     else:
         for result in query:
             id = result['_id']
@@ -104,10 +105,11 @@ def create_df(collection):
     for result in collection.find({}):
         song_name.append(result['track'])
         artist_name.append(result['artist'])
-        time = datetime.utcfromtimestamp(result['time']).strftime('%Y-%m-%d')
+        time = datetime.utcfromtimestamp(
+            result['time']).strftime('%Y-%m-%d %H:%M:%S')
         suggested_date.append(time)
         song_count = result['count']
-        break
+
     df = pd.DataFrame({
         'song_name': song_name,
         'artist_name': artist_name,

@@ -4,7 +4,7 @@
 <body style="font-family:arial, sans-serif">
     <h1></h1>
     <h6><a href="/">Return to index page</a></h6>
-    <div id="chart" class="chart"></div>
+    
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -13,7 +13,7 @@
                         <form class="form-inline" method="GET" action="user_collection">
                             <input placeholder="Track Suggestion" class="form-control" type="text" name="track">
                             <input placeholder="Artist" class="form-control" type="text" name="artist">
-                            <input placeholder="Your Name" class="form-control" type="text" name="username">
+                            <!-- <input placeholder="Your Name" class="form-control" type="text" name="username"> -->
                             <button class="btn btn-primary" type="submit">search</button>
                         </form>
                     </div>
@@ -21,6 +21,7 @@
             </div>
         </div>
     </div>
+    <div id="chart" class="chart"></div>
 </body>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

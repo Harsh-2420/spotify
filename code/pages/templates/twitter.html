@@ -28,6 +28,15 @@
 							Trending tweets not found. Try another artist
 						{%else%}
 							{% if iteration == 1%}
+
+								The sentiments about {{key}} on Twitter:
+								<br><br>
+								{% for sentiment in sentiments %}
+									{{sentiment[0]}}:
+									{{sentiment[1]}} %
+									<br>
+								{% endfor %}
+								<br><br>
 								Trending tweets on {{key}}:
 								{% for tweet in tweets %}
 									<div class="card mt-2">
@@ -39,14 +48,7 @@
 									</div>
 								{% endfor %}
 								<br><br>
-								The sentiments about {{key}} on Twitter:
-								<br><br>
 
-								{% for sentiment in sentiments %}
-									{{sentiment[0]}}:
-									{{sentiment[1]}} %
-								<br>
-								{% endfor %}
 
 							{% else %}
 								Trending tweets around the world:

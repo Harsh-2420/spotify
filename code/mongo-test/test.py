@@ -2,9 +2,10 @@ from pymongo import MongoClient
 import time
 from datetime import datetime
 import pandas as pd
+import os
 
-cluster = MongoClient(
-    "mongodb+srv://admin:asdfgh09@cluster0.h6kse.mongodb.net/spotty?retryWrites=true&w=majority")
+mongo_uri = os.environ.get('MONGO_URI')
+cluster = MongoClient(mongo_uri)
 db = cluster["spotty"]
 collection = db['userTracks']
 curr_time = time.time()

@@ -18,9 +18,8 @@ def update_db(collection, track, artist, curr_time):
                               'track_check': track.lower(), 'artist_check': artist.lower(), 'count': count})
     else:
         for result in query:
-            curr_count = result['count']
-        collection.update_one({'track_check': track.lower()}, {
-            'artist_check': artist.lower}, {'$set': {'count': curr_count}})
+            id = result['_id']
+        collection.find_one_and_update({'_id': id}, {'$inc': {'count': 1}})
 
 
 update_db(collection, 'Ninety', 'Jaden', curr_time)

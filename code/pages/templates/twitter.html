@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Flask Tweepy</title>
+	<title>Spotty | Twitter Overview</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
 </head>
 	<body>
+		<section class="page-section bg-primary text-white mb-0" id="about">
+			<div class="container">
+				<h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+				<div class="divider-custom divider-light">
+					<div class="divider-custom-line"></div>
+					<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+					<div class="divider-custom-line"></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 ms-auto"><p class="lead">This is pretty self explanatory isn't it. Check out the tweets of your favorite artists (or any hot topic you want) and find the sentiment people have on that topic.</p></div>
+				</div>
+			</div>
+		</section>
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6">

@@ -1,9 +1,24 @@
 <!doctype html>
 <html>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
 <body style="font-family:arial, sans-serif">
-    <h1></h1>
-    <h6><a href="/">Return to index page</a></h6>
+    <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 ms-auto"><p class="lead">You've seen the recommendations the machines gave. But do you wonder what other users around the world like? Here are some of Spotty users' favorite tracks.  </br> Go ahead. Add yours too! Don't be shy</p></div>
+                <!-- <div class="col-lg-4 me-auto"><p class="lead"></p></div> -->
+            </div>
+        </div>
+    </section>
+    <!-- <h6><a href="/">Return to index page</a></h6> -->
     
     <div class="container">
         <div class="row justify-content-center">
@@ -11,8 +26,8 @@
                 <div class="p-5">
                     <div class="block">
                         <form class="form-inline" method="GET" action="user_collection">
-                            <input placeholder="Track Suggestion" class="form-control" type="text" name="track">
-                            <input placeholder="Artist" class="form-control" type="text" name="artist">
+                            <input placeholder="Track" class="form-control" type="text" name="track" style="width: 11em">
+                            <input placeholder="Artist" class="form-control" type="text" name="artist" style="width: 11em">
                             <!-- <input placeholder="Your Name" class="form-control" type="text" name="username"> -->
                             <button class="btn btn-primary" type="submit">search</button>
                         </form>

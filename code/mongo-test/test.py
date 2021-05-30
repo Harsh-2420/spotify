@@ -35,18 +35,17 @@ def create_df(collection):
         time = datetime.utcfromtimestamp(
             result['time']).strftime('%Y-%m-%d %H:%M:%S')
         suggested_date.append(time)
-        song_count = result['count']
+        song_count.append(result['count'])
 
     df = pd.DataFrame({
         'song_name': song_name,
         'artist_name': artist_name,
         'suggested_date': suggested_date,
         'count': song_count
-
     })
     return df
 
 
-update_db(collection, 'KOD', 'J.Cole', curr_time)
+# update_db(collection, 'KOD', 'J.Cole', curr_time)
 track_df = create_df(collection)
 print(track_df)

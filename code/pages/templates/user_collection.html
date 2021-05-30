@@ -4,14 +4,16 @@
 <body style="font-family:arial, sans-serif">
     <h1></h1>
     <h6><a href="/">Return to index page</a></h6>
-    <!-- <div id="chart" class="chart"></div> -->
+    <div id="chart" class="chart"></div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="p-5">
                     <div class="block">
                         <form class="form-inline" method="GET" action="user_collection">
-                            <input placeholder="Favorite Track" class="form-control" type="text" name="key">
+                            <input placeholder="Track Suggestion" class="form-control" type="text" name="track">
+                            <input placeholder="Artist" class="form-control" type="text" name="artist">
+                            <input placeholder="Your Name" class="form-control" type="text" name="username">
                             <button class="btn btn-primary" type="submit">search</button>
                         </form>
                     </div>
@@ -23,7 +25,7 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-    // var graphs = {{graphJSON | safe}};
-    // Plotly.plot('chart',graphs,{});             
+    var graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});             
 </script>
 </html>

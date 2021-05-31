@@ -106,5 +106,17 @@ def create_spotify_ouath():
         scope="user-top-read user-library-read")
 
 
+# def contact():
+#     # mongo = current_app.config['mongo']
+#     collection = mongo.db.contact
+#     name = request.args.get('name')
+#     phone = request.args.get('phone')
+#     message = request.args.get('message')
+#     email = request.args.get('email')
+#     collection.insert_one({'name': name, 'phone': phone,
+#                           'email': email, 'message': message})
+#     return render_template('index.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)

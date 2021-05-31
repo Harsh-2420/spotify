@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, current_app
+from flask import render_template, Blueprint, current_app, session
 import numpy as np
 import pandas as pd
 import math
@@ -7,13 +7,17 @@ import plotly.express as px
 import plotly.graph_objects as go
 import json
 from datetime import datetime
+import spotipy
 
 top_ = Blueprint('top', __name__, template_folder='templates')
 
 
 @top_.route('/top')
 def top():
-    sp = current_app.config['sp']
+    # sp = current_app.config['sp']
+    # sp = session.get('sp', None)
+    token_info = session.get('token_info', None)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
 
     top_tracks_df = get_top_tracks_data(sp)
     top_tracks_df = pd.DataFrame(top_tracks_df)
@@ -90,7 +94,7 @@ def top():
     graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
     header = 'Data on your favorite artists'
     description = ''
-    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3, header=header, description=description)
+    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3)
 
 
 def get_top_tracks_data(sp):

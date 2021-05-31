@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, current_app
+from flask import render_template, Blueprint, current_app, session
 import numpy as np
 import pandas as pd
 import math
@@ -9,13 +9,18 @@ import plotly.express as px
 import plotly.graph_objects as go
 import json
 from datetime import datetime
+import spotipy
 
 spotify_rec_ = Blueprint('spotify_rec', __name__, template_folder='templates')
 
 
 @spotify_rec_.route('/spotify_rec')
 def spotify_rec():
-    sp = current_app.config['sp']
+    token_info = session.get('token_info', None)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    # sp = current_app.config['sp']
+
+    # sp = session.get('sp', None)
     df = create_related_artist_df(sp)
 
     fig = go.Figure()

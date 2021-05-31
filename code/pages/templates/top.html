@@ -1,12 +1,29 @@
 <!doctype html>
 <html>
+    <head>
+        <title>Spotty | Reddit Overview</title>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    </head>
 <body style="font-family:arial, sans-serif">
-    <h1>{{header}}</h1>
+    <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <h2 class="page-section-heading text-center text-uppercase text-white">Your Favorites </h2>
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 ms-auto"><p style='align-self: center' class="lead">Which are the songs you listen to on repeat? Yep, everyone does it. Don't be embarassed.</p></div>
+            </div>
+        </div>
+    </section>
     <h6><a href="/">Return to index page</a></h6>
     <div id="chart" class="chart"></div>
     <div id="chart2" class="chart2"></div>
     <div id="chart3" class="chart3"></div>
-    <div>{{description}}</div>
 </body>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

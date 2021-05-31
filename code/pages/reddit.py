@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, current_app, request
+from flask import render_template, Blueprint, current_app, request, session
 import numpy as np
 import pandas as pd
 import math
@@ -10,6 +10,7 @@ import json
 from datetime import datetime
 from os import environ
 import os
+import spotipy
 
 reddit_ = Blueprint('reddit', __name__, template_folder='templates')
 
@@ -21,7 +22,10 @@ reddit_user_agent = environ['reddit_user_agent']
 
 @reddit_.route('/reddit')
 def reddit():
-    sp = current_app.config['sp']
+    # sp = current_app.config['sp']
+    # sp = session.get('sp', None)
+    token_info = session.get('token_info', None)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
     key = request.args.get('key')
     reddit_obj = praw.Reddit(client_id=reddit_client_id, client_secret=reddit_client_secret,
                              username=reddit_username, user_agent=reddit_user_agent)
@@ -138,9 +142,6 @@ def get_reddit_top_artist_data(names, reddit_obj):
     df['platform'] = platform
     df['Artist Name'] = artist
     return df
-
-
-
 
 
 def get_new_df(key, reddit_obj):

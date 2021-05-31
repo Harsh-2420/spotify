@@ -1,14 +1,28 @@
 <!doctype html>
 <html>
     <head>
+        <title>Spotty | Reddit Overview</title>
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body style="font-family:arial, sans-serif">
-        <h1>Reddit</h1>
-        <h6><a href="/">Return to index page</a></h6>
-        <div> Find out how popular your favorite artists are on Reddit!</div>
-        <h4>Interact with the plot:</h4>
-        <p>Click an Artist to toggle them and double click to toggle all. Zoom in and out of the plot or pan around. Check out other features on the top right corner of the plot! </p>
+        <section class="page-section bg-primary text-white mb-0" id="about">
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-white">Reddit</h2>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 ms-auto"><p style='align-self: center' class="lead">Find out how popular your favorite artists are on Reddit!</p></div>
+                    <div class="col-lg-12 ms-auto"><p style='align-self: center' class="lead">Interacting with the plot:</br>Click an Artist to toggle them and double click to toggle all. Zoom in and out of the plot or pan around. Check out other features on the top right corner of the plot! </p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- <h6><a href="/">Return to index page</a></h6> -->
         <div id="chart" class="chart"></div>
         
         

@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, current_app, request
+from flask import render_template, Blueprint, current_app, request, session
 import numpy as np
 import pandas as pd
 import tweepy
@@ -10,6 +10,7 @@ from datetime import datetime
 from os import environ
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import re
+import spotipy
 
 
 twitter_top_ = Blueprint('twitter_top', __name__, template_folder='templates')
@@ -23,7 +24,10 @@ twitter_access_token_secret = environ['twitter_access_token_secret']
 
 @twitter_top_.route('/twitter_top')
 def twitter_top():
-    sp = current_app.config['sp']
+    # sp = current_app.config['sp']
+    # sp = session.get('sp', None)
+    token_info = session.get('token_info', None)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
     auth = tweepy.OAuthHandler(twitter_consumer_key, twitter_consumer_secret)
     auth.set_access_token(twitter_access_token, twitter_access_token_secret)
     api = tweepy.API(auth)

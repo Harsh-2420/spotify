@@ -2,6 +2,7 @@
 from flask import Flask, request, url_for, redirect, session, render_template
 from flask_session import Session
 from flask_pymongo import PyMongo
+import sys
 
 # Blueprint imports
 # from pages.recommend import recommend_
@@ -77,8 +78,11 @@ def getTracks():
     except:
         print("user not logged in")
         return redirect('/')
-    sp = spotipy.Spotify(auth=token_info['access_token'])
-    app.config['sp'] = sp
+    session['token_info'] = token_info
+    # sp = spotipy.Spotify(auth=token_info['access_token'])
+    # app.config['sp'] = sp
+    # session['sp'] = sp
+    # print(token_info, file=sys.stderr)
     return render_template('index.html')
 
 

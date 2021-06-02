@@ -24,7 +24,11 @@ reddit_user_agent = environ['reddit_user_agent']
 def reddit():
     # sp = current_app.config['sp']
     # sp = session.get('sp', None)
-    token_info = session.get('token_info', None)
+    current_user_id = request.cookies.get('SESSION_COOKIE_NAME')
+    all_sp_objects = current_app.config['all_sp_objects']
+    # all_sp_objects = session.get('all_sp_objects', None)
+    token_info = all_sp_objects[current_user_id]
+    # token_info = session.get('token_info', None)
     sp = spotipy.Spotify(auth=token_info['access_token'])
     key = request.args.get('key')
     reddit_obj = praw.Reddit(client_id=reddit_client_id, client_secret=reddit_client_secret,

@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, current_app, session
+from flask import render_template, Blueprint, current_app, session, request
 import numpy as np
 import pandas as pd
 import math
@@ -14,9 +14,11 @@ top_ = Blueprint('top', __name__, template_folder='templates')
 
 @top_.route('/top')
 def top():
-    # sp = current_app.config['sp']
-    # sp = session.get('sp', None)
-    token_info = session.get('token_info', None)
+    current_user_id = request.cookies.get('SESSION_COOKIE_NAME')
+    all_sp_objects = current_app.config['all_sp_objects']
+    # all_sp_objects = session.get('all_sp_objects', None)
+    token_info = all_sp_objects[current_user_id]
+    # token_info = session.get('token_info', None)
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
     top_tracks_df = get_top_tracks_data(sp)

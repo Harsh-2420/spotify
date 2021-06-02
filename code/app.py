@@ -79,10 +79,6 @@ def getTracks():
         print("user not logged in")
         return redirect('/')
     session['token_info'] = token_info
-    # sp = spotipy.Spotify(auth=token_info['access_token'])
-    # app.config['sp'] = sp
-    # session['sp'] = sp
-    # print(token_info, file=sys.stderr)
     return render_template('index.html')
 
 
@@ -106,16 +102,23 @@ def create_spotify_ouath():
         scope="user-top-read user-library-read")
 
 
-# def contact():
-#     # mongo = current_app.config['mongo']
-#     collection = mongo.db.contact
-#     name = request.args.get('name')
-#     phone = request.args.get('phone')
-#     message = request.args.get('message')
-#     email = request.args.get('email')
-#     collection.insert_one({'name': name, 'phone': phone,
-#                           'email': email, 'message': message})
-#     return render_template('index.html')
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        message = request.form.get('message')
+        collection = mongo.db.contact
+        # name = request.args.get('name')
+        # phone = request.args.get('phone')
+        # message = request.args.get('message')
+        # email = request.args.get('email')
+        collection.insert_one({'name': name, 'phone': phone,
+                               'email': email, 'message': message})
+        return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 
 if __name__ == "__main__":

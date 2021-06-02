@@ -18,9 +18,6 @@ spotify_rec_ = Blueprint('spotify_rec', __name__, template_folder='templates')
 def spotify_rec():
     token_info = session.get('token_info', None)
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    # sp = current_app.config['sp']
-
-    # sp = session.get('sp', None)
     df = create_related_artist_df(sp)
 
     fig = go.Figure()

@@ -16,12 +16,11 @@ spotify_rec_ = Blueprint('spotify_rec', __name__, template_folder='templates')
 
 @spotify_rec_.route('/spotify_rec')
 def spotify_rec():
-    current_user_id = request.cookies.get('SESSION_COOKIE_NAME')
+    current_user_id = request.cookies.get('Spotty Cookie')
     all_sp_objects = current_app.config['all_sp_objects']
-    # all_sp_objects = session.get('all_sp_objects', None)
     token_info = all_sp_objects[current_user_id]
-    # token_info = session.get('token_info', None)
     sp = spotipy.Spotify(auth=token_info['access_token'])
+
     df = create_related_artist_df(sp)
 
     fig = go.Figure()

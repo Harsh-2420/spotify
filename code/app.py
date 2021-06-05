@@ -40,7 +40,7 @@ app.config['mongo'] = mongo
 
 app.secret_key = "spotty"
 sess = Session()
-app.config['SESSION_COOKIE_NAME'] = "SESSION_COOKIE_NAME"
+app.config['SESSION_COOKIE_NAME'] = "Spotty Cookie"
 TOKEN_INFO = "token_i"
 app.config['all_sp_objects'] = {}
 
@@ -79,9 +79,8 @@ def getTracks():
     except:
         print("user not logged in")
         return redirect('/')
-    current_user_id = request.cookies.get('SESSION_COOKIE_NAME')
+    current_user_id = request.cookies.get('Spotty Cookie')
     app.config['all_sp_objects'][current_user_id] = token_info
-    # session['token_info'] = token_info
     return render_template('index.html')
 
 

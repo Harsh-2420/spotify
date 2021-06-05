@@ -26,8 +26,9 @@ twitter_access_token_secret = environ['twitter_access_token_secret']
 def twitter_top():
     # sp = current_app.config['sp']
     # sp = session.get('sp', None)
-    token_info = session.get('token_info', None)
-    sp = spotipy.Spotify(auth=token_info['access_token'])
+    sp = session.get('sp', None)
+    # token_info = session.get('token_info', None)
+    # sp = spotipy.Spotify(auth=token_info['access_token'])
     auth = tweepy.OAuthHandler(twitter_consumer_key, twitter_consumer_secret)
     auth.set_access_token(twitter_access_token, twitter_access_token_secret)
     api = tweepy.API(auth)

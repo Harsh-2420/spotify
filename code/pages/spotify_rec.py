@@ -1,4 +1,5 @@
-from flask import render_template, Blueprint, current_app, session, request
+# from app import *
+from flask import app, render_template, Blueprint, current_app, session, request
 import numpy as np
 import pandas as pd
 import math
@@ -11,14 +12,20 @@ import json
 from datetime import datetime
 import spotipy
 
+# import sys
+# sys.path.append("..")
+
 spotify_rec_ = Blueprint('spotify_rec', __name__, template_folder='templates')
+TOKEN_INFO = "token_i"
 
 
 @spotify_rec_.route('/spotify_rec')
 def spotify_rec():
-    current_user_id = request.cookies.get('Spotty Cookie')
-    all_sp_objects = current_app.config['all_sp_objects']
-    token_info = all_sp_objects[current_user_id]
+    unique_id = request.cookies.get('Spotty Cookie')
+    # token_objects = session.get('token_objects')
+    # token_info = token_objects[unique_id]
+
+    token_info = session.get(TOKEN_INFO)
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
     df = create_related_artist_df(sp)

@@ -42,7 +42,7 @@ app.secret_key = "spotty"
 sess = Session()
 app.config['SESSION_COOKIE_NAME'] = "Spotty Cookie"
 TOKEN_INFO = "token_i"
-app.config['all_sp_objects'] = {}
+# session['token_objects'] = {}
 
 
 @app.route('/')
@@ -68,6 +68,8 @@ def redirectPage():
     session.clear()
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
+    unique_id = request.cookies.get('Spotty Cookie')
+    # session['token_objects'][unique_id] = token_info
     session[TOKEN_INFO] = token_info
     return redirect(url_for('getTracks', _external=True))
 
@@ -79,8 +81,6 @@ def getTracks():
     except:
         print("user not logged in")
         return redirect('/')
-    current_user_id = request.cookies.get('Spotty Cookie')
-    app.config['all_sp_objects'][current_user_id] = token_info
     return render_template('index.html')
 
 

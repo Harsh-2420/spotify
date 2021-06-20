@@ -10,14 +10,14 @@ from datetime import datetime
 import spotipy
 
 top_ = Blueprint('top', __name__, template_folder='templates')
+TOKEN_INFO = "token_i"
 
 
 @top_.route('/top')
 def top():
-    current_user_id = request.cookies.get('Spotty Cookie')
-    all_sp_objects = current_app.config['all_sp_objects']
-    token_info = all_sp_objects[current_user_id]
+    token_info = session.get(TOKEN_INFO)
     sp = spotipy.Spotify(auth=token_info['access_token'])
+    
     top_tracks_df = get_top_tracks_data(sp)
     top_tracks_df = pd.DataFrame(top_tracks_df)
 

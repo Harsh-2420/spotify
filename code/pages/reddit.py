@@ -13,6 +13,7 @@ import os
 import spotipy
 
 reddit_ = Blueprint('reddit', __name__, template_folder='templates')
+TOKEN_INFO = "token_i"
 
 reddit_client_secret = environ['reddit_client_secret']
 reddit_client_id = environ['reddit_client_id']
@@ -22,9 +23,7 @@ reddit_user_agent = environ['reddit_user_agent']
 
 @reddit_.route('/reddit')
 def reddit():
-    current_user_id = request.cookies.get('Spotty Cookie')
-    all_sp_objects = current_app.config['all_sp_objects']
-    token_info = all_sp_objects[current_user_id]
+    token_info = session.get(TOKEN_INFO)
     sp = spotipy.Spotify(auth=token_info['access_token'])
     key = request.args.get('key')
     reddit_obj = praw.Reddit(client_id=reddit_client_id, client_secret=reddit_client_secret,

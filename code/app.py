@@ -41,6 +41,8 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
 
+SPOTIPY_CLIENT_ID = environ['SPOTIPY_CLIENT_ID']
+SPOTIPY_CLIENT_SECRET = environ['SPOTIPY_CLIENT_SECRET']
 
 # Twitter Keys
 twitter_consumer_key = environ['twitter_consumer_key']

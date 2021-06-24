@@ -6,5 +6,3 @@ data/
 *.env
 code/jupyter/git_ignore/
 *.cache
-code/.flask_session
-code/.spotify_caches

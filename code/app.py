@@ -67,7 +67,7 @@ if not os.path.exists(caches_folder):
 def session_cache_path():
     return caches_folder + session.get('uuid')
 
-app.config['SESSION_COOKIE_NAME'] = "Spotty Cookie"
+# app.config['SESSION_COOKIE_NAME'] = "Spotty Cookie"
 
 # ----------------------------ERROR PAGE----------------------------
 
@@ -107,7 +107,21 @@ def index():
     # Step 4. Signed in, display data
     return render_template('index.html')
 
+
+@app.route('/sign_out')
+def sign_out():
+    try:
+        # Remove the CACHE file (.cache-test) so that a new user can authorize.
+        os.remove(session_cache_path())
+        session.clear()
+    except OSError as e:
+        print ("Error: %s - %s." % (e.filename, e.strerror))
+    return redirect('/')
+
 # ----------------------------TOP PAGE----------------------------
+
+
+
 
 @app.route('/top')
 def top():
@@ -561,7 +575,6 @@ def get_new_df(key, reddit_obj):
 
 
 # ----------------------------RECOMMENDATIONS PAGE----------------------------
-
 
 @app.route('/spotify_rec')
 def spotify_rec():

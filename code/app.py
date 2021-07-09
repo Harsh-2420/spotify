@@ -89,7 +89,7 @@ def index():
         session['uuid'] = str(uuid.uuid4())
 
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-    auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-library-read',
+    auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-library-read user-read-currently-playing playlist-modify-private',
                                                 cache_handler=cache_handler, 
                                                 show_dialog=True)
 
@@ -119,9 +119,6 @@ def sign_out():
     return redirect('/')
 
 # ----------------------------TOP PAGE----------------------------
-
-
-
 
 @app.route('/top')
 def top():

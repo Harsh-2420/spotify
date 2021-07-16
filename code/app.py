@@ -73,14 +73,14 @@ def session_cache_path():
 
 @app.errorhandler(404)
 def error404(error):
-    return "A bug is preventing the app from loading. Try going back to the home page and reloading or come back later. Sorry!", 404
+    return render_template('error.html'), 404
 
 @app.errorhandler(500)
 def error500(error):
-    return "A bug is preventing the app from loading. Try going back to the home page and reloading or come back later. Sorry!", 500
+    return render_template('error.html'), 500
 
 
-# ----------------------------HOME PAGE----------------------------
+# ----------------------------Home and Authentication----------------------------
 
 @app.route('/')
 def index():

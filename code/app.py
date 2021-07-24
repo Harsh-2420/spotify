@@ -144,19 +144,17 @@ def artist():
 # ------------------------------ ARTIST PERSONAL PAGE -------------------------------------
 @app.route('/artist_personal/<url>')
 def artist_personal(url):
-    return "the url is " + url
-    # url = list(url)
-    # cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-    # auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
-    # if not auth_manager.validate_token(cache_handler.get_cached_token()):
-    #     return redirect('/')
-    # sp = spotipy.Spotify(auth_manager=auth_manager)   
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)   
     
-    # track_list = {}
-    # top_tracks = sp.artist_top_tracks(url)['tracks']
-    # for track in top_tracks:
-    #     track['name']
-    # return render_template('artist_personal.html', track_list=url)
+    track_list = []
+    top_tracks = sp.artist_top_tracks(url)['tracks']
+    for track in top_tracks:
+        track_list.append(track['name'])
+    return render_template('artist_personal.html', track_list=track_list)
     
     # for artist in artist_dict.values():
     #     top = sp.artist_top_tracks(url)['tracks']

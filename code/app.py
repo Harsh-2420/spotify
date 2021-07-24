@@ -129,21 +129,15 @@ def artist():
         return redirect('/')
 
     sp = spotipy.Spotify(auth_manager=auth_manager)    
-    top_artists  = sp.current_user_top_artists(limit=20)
-    artist_dict = {}
+    top_artists  = sp.current_user_top_artists(limit=9)
+    artist_info = []
     for artist in top_artists['items']: 
-        artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
-    name_list = artist_dict.keys()
-    # artist_top_tracks_dict = {}
-    # for artist in artist_dict.values():
-    #     top = sp.artist_top_tracks(artist[3])['tracks']
-    #     for track in top:
-    #         url = track['external_urls']['spotify']
-    #         artist_top_tracks_dict[track['name']] = url
-    # name_list = []
-    # for artist in artist_top_tracks_dict.keys():
-    #     name_list.append(artist)
-    return render_template('artist.html', name_list = name_list)
+        name = artist['name']
+        image = artist['images'][1]['url']
+        followers = artist['followers']['total']
+        artist_info.append([name, image, followers])
+        # artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
+    return render_template('artist.html', artist_info = artist_info)
 
 
 # ----------------------------TOP PAGE----------------------------

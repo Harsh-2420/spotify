@@ -119,7 +119,7 @@ def sign_out():
     return redirect('/')
 
 
-# ------------------------------ ARTISTS -------------------------------------
+# ------------------------------ TOP ARTISTS PAGE -------------------------------------
 
 @app.route('/artist')
 def artist():
@@ -135,9 +135,38 @@ def artist():
         name = artist['name']
         image = artist['images'][1]['url']
         followers = artist['followers']['total']
-        artist_info.append([name, image, followers])
+        url = artist['id']
+        artist_info.append([name, image, followers, url])
         # artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
     return render_template('artist.html', artist_info = artist_info)
+
+
+# ------------------------------ ARTIST PERSONAL PAGE -------------------------------------
+@app.route('/artist_personal/<url>')
+def artist_personal(url):
+    return "the url is " + url
+    # url = list(url)
+    # cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    # auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    # if not auth_manager.validate_token(cache_handler.get_cached_token()):
+    #     return redirect('/')
+    # sp = spotipy.Spotify(auth_manager=auth_manager)   
+    
+    # track_list = {}
+    # top_tracks = sp.artist_top_tracks(url)['tracks']
+    # for track in top_tracks:
+    #     track['name']
+    # return render_template('artist_personal.html', track_list=url)
+    
+    # for artist in artist_dict.values():
+    #     top = sp.artist_top_tracks(url)['tracks']
+    #     for track in top:
+    #         url = track['external_urls']['spotify']
+    #         artist_top_tracks_dict[track['name']] = url
+    #         break
+    #     break
+    # artist_top_tracks_dict 
+    # pass
 
 
 # ----------------------------TOP PAGE----------------------------
@@ -785,7 +814,7 @@ def contact():
 
 
 if __name__ == '__main__':
-    app.run(threaded=True, port=int(os.environ.get("PORT",
+    app.run(debug=True, threaded=True, port=int(os.environ.get("PORT",
                                                    os.environ.get("SPOTIPY_REDIRECT_URI", 5000).split(":")[-1])))
 
 

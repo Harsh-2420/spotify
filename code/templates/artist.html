@@ -7,14 +7,20 @@
     
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <div class="profile-card-2">
-                    <img src="{{artist[1]}}" class="img img-responsive">
-                    <div class="profile-name"> {{artist[0]}} </div>
-                    <div class="profile-username">{{artist[2]}}followers</div>
+            
+                <div class="col-md-4">
+                    <!-- <a href='artist_personal/{{artist[3]}}'></a> -->
+                    <div class="profile-card-2">
+                        <img src="{{artist[1]}}" class="img img-responsive">
+                        <div class="profile-name"> {{artist[0]}} </div>
+                        <div class="profile-username">{{artist[2]}} followers</div>
+                    </div>
+                <!-- </a> -->
                 </div>
-            </div>
+            
         </div>
     </div>
+    <a href='artist_personal/{{artist[3]}}'>artist redirect</a>
     {% endfor %}
+    
 </html>

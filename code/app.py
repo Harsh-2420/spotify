@@ -118,6 +118,34 @@ def sign_out():
         print ("Error: %s - %s." % (e.filename, e.strerror))
     return redirect('/')
 
+
+# ------------------------------ ARTISTS -------------------------------------
+
+@app.route('/artist')
+def artist():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+    top_artists  = sp.current_user_top_artists(limit=20)
+    artist_dict = {}
+    for artist in top_artists['items']: 
+        artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
+    name_list = artist_dict.keys()
+    # artist_top_tracks_dict = {}
+    # for artist in artist_dict.values():
+    #     top = sp.artist_top_tracks(artist[3])['tracks']
+    #     for track in top:
+    #         url = track['external_urls']['spotify']
+    #         artist_top_tracks_dict[track['name']] = url
+    # name_list = []
+    # for artist in artist_top_tracks_dict.keys():
+    #     name_list.append(artist)
+    return render_template('artist.html', name_list = name_list)
+
+
 # ----------------------------TOP PAGE----------------------------
 
 @app.route('/top')

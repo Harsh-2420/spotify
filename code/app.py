@@ -136,25 +136,35 @@ def artist():
         image = artist['images'][1]['url']
         followers = artist['followers']['total']
         url = artist['id']
+        # genres = artist['genres']
         artist_info.append([name, image, followers, url])
         # artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
     return render_template('artist.html', artist_info = artist_info)
 
 
 # ------------------------------ ARTIST PERSONAL PAGE -------------------------------------
-@app.route('/artist_personal/<url>')
-def artist_personal(url):
+@app.route('/artist_personal/<artist_id>')
+def artist_personal(artist_id):
+    # Initialise sp variable
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
     sp = spotipy.Spotify(auth_manager=auth_manager)   
     
+    # Get Artist Data - Image, Name, Followers, Genre
+    # Get Top Tracks
+    artist_data = sp.artists([artist_id])['artists'][0]
+    name = artist_data['name']
+    image = artist_data['images'][1]['url']
+    followers = artist_data['followers']['total']
+    genres = artist_data['genres']
+
     track_list = []
-    top_tracks = sp.artist_top_tracks(url)['tracks']
+    top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_list.append(track['name'])
-    return render_template('artist_personal.html', track_list=track_list)
+    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres)
     
     # for artist in artist_dict.values():
     #     top = sp.artist_top_tracks(url)['tracks']

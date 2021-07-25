@@ -31,12 +31,13 @@
   <div class="cover bg-light">
     <div class="container px-3">
       <div class="row">
-        <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{ url_for('static', filename='images/avatar.jpg') }}" width="400" height="400" alt="Walter Patterson"/></div>
+        <!-- <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{ url_for('static', filename='images/avatar.jpg') }}" width="400" height="400" alt="Walter Patterson"/></div> -->
+        <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{image}}" width="400" height="400" alt="Walter Patterson"/></div>
         <div class="col-lg-6">
           <div class="mt-5">
             <p class="lead text-uppercase mb-1">Artist</p>
-            <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">I’m Walter Patterson</h1>
-            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">Web Developer & Mobile Application Developer</p>
+            <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">{{ name }}</h1>
+            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">{{ genres }} | {{ followers }} followers</p>
             <div class="social-nav" data-aos="fade-up" data-aos-delay="200">
             </div>
             <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="#contact">Explore <i class="fas fa-arrow-right"></i></a></div>
@@ -174,7 +175,7 @@
 
 
 
-
+{{ track_list }}
 
 
 

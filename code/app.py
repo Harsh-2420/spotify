@@ -217,8 +217,8 @@ def top():
         return redirect('/')
 
     sp = spotipy.Spotify(auth_manager=auth_manager)    
-    top_tracks_df = get_top_tracks_data(sp)
-    top_tracks_df = pd.DataFrame(top_tracks_df)
+    # top_tracks_df = get_top_tracks_data(sp)
+    # top_tracks_df = pd.DataFrame(top_tracks_df)
 
     top_artist_df = create_top_artist_data(sp)
     top_genres_short = top_genres(top_artist_df)
@@ -245,15 +245,15 @@ def top():
 
     d = dict(tuple(popular_df.groupby('artist_name')))
 
-    fig = go.Figure()
-    fig.add_trace(go.Table(
-        header=dict(values=['long_term', 'medium_term', 'short_term'],
-                    fill_color='paleturquoise',
-                    align='left'),
-        cells=dict(values=[top_tracks_df.long_term, top_tracks_df.medium_term, top_tracks_df.short_term],
-                   fill_color='lavender',
-                   align='left'))
-                  )
+    # fig = go.Figure()
+    # fig.add_trace(go.Table(
+    #     header=dict(values=['long_term', 'medium_term', 'short_term'],
+    #                 fill_color='paleturquoise',
+    #                 align='left'),
+    #     cells=dict(values=[top_tracks_df.long_term, top_tracks_df.medium_term, top_tracks_df.short_term],
+    #                fill_color='lavender',
+    #                align='left'))
+    #               )
     fig2 = go.Figure()
     for artist, data in d.items():
         fig2.add_trace(go.Scatter(
@@ -287,12 +287,12 @@ def top():
     ))
     fig3.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    # graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
     graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
     header = 'Data on your favorite artists'
     description = ''
-    return render_template('top.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3)
+    return render_template('top.html', graphJSON2=graphJSON2, graphJSON3=graphJSON3)
 
 
 def get_top_tracks_data(sp):

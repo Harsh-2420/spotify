@@ -26,6 +26,23 @@
     </noscript>
   </head>
   <body id="top">
+	<header class="bg-light">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light" id="header-nav" role="navigation">
+		  <div class="container"><a class="link-dark navbar-brand site-title mb-0" href="#">Super Folio</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			  <ul class="navbar-nav ms-auto me-2">
+				<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+				<li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+				<li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+				<li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+				<li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+				<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+	  </header>
     <div class="page-content">
       <div id="content">
 <header>
@@ -39,8 +56,6 @@
             <p class="lead text-uppercase mb-1">Artist</p>
             <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">{{ name }}</h1>
             <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">{{ genres }}    |    {{ followers }} followers</p>
-            <div class="social-nav" data-aos="fade-up" data-aos-delay="200">
-            </div>
             <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore <i class="fas fa-arrow-right"></i></a></div>
           </div>
         </div>
@@ -123,22 +138,21 @@
 
 
     
-{% for album in album_info %}
-    
+       
 <div class="artist_container">
-    <div class="row">
-        
-            <div class="col-md-4">
-                <div class="profile-card-2">
-                    <img src="{{album[1][1]}}" class="img img-responsive">
-                    <div class="profile-name"> {{album[0]}} </div>
-                    <div class="profile-username">{{album[1][0]}} followers</div>
-                </div>
-            </div>
-        
+  	<div class="row">
+		{% for album in album_info %}
+			<div class="col-md-4">
+				<div class="profile-card-2">
+					<img src="{{album[1][1]}}" class="img img-responsive">
+					<div class="profile-name"> {{album[0]}} </div>
+					<div class="profile-username">{{album[1][0]}} followers</div>
+				</div>
+			</div>
+		{% endfor %}        
     </div>
 </div>
-{% endfor %}
+
 
 
 <!-- 

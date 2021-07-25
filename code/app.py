@@ -155,7 +155,7 @@ def artist_personal(artist_id):
     # Get Artist Data - Image, Name, Followers, Genre, Redirect
     artist_data = sp.artists([artist_id])['artists'][0]
     name = artist_data['name']
-    image = artist_data['images'][1]['url']
+    image = artist_data['images'][0]['url']
     followers = artist_data['followers']['total']
     genres = artist_data['genres'][0]
     redirect_url = artist_data['external_urls']['spotify']

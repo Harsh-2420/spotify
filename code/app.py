@@ -165,6 +165,7 @@ def artist_personal(artist_id):
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_list.append(track['name'])
+        track_url = track['external_urls']['spotify']
     
     # Get Top albums
     albums = sp.artist_albums(artist_id, album_type='album')
@@ -174,9 +175,10 @@ def artist_personal(artist_id):
             album_info[item['name']] = [item['release_date'], item['images'][0]['url']]
     album_info = list(album_info.items())
 
-    # Get Similar Artists
+    # Artist Features
+    features = list(sp.audio_features([track_url])[0].items())
 
-    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url, album_info=album_info)
+    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url, album_info=album_info, features=features)
     
     # for artist in artist_dict.values():
     #     top = sp.artist_top_tracks(url)['tracks']
@@ -187,6 +189,22 @@ def artist_personal(artist_id):
     #     break
     # artist_top_tracks_dict 
     # pass
+
+
+# ------------------------------ TOP TRACKS PAGE -------------------------------------
+
+@app.route('/tracks')
+def tracks():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+    results = sp.current_user_top_tracks(limit=20)
+    track_info = []
+    for track in results['items']:
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+    return render_template('tracks.html', track_info = track_info)
 
 
 # ----------------------------TOP PAGE----------------------------

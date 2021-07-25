@@ -1,0 +1,23 @@
+<html>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='card.css') }}"/>
+    <!-- <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script> -->
+       
+    <div class="artist_container">
+        <div class="row">
+
+            {% for tracks in track_info %}
+                <div class="col-md-4">
+                    <a href='artist_personal/{{tracks[3]}}'>
+                        <div class="profile-card-2">
+                            <img src="{{tracks[2]}}" class="img img-responsive">
+                            <div class="profile-name"> {{tracks[0]}} </div>
+                            <div class="profile-username"> {tracks[1]}}</div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</html>

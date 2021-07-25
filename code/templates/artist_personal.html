@@ -28,23 +28,23 @@
   <body id="top">
 	<header class="bg-light">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light" id="header-nav" role="navigation">
-		  <div class="container"><a class="link-dark navbar-brand site-title mb-0" href="#">Super Folio</a>
+		  <div class="container"><a class="link-dark navbar-brand site-title mb-0" href="#">Spotty</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			  <ul class="navbar-nav ms-auto me-2">
-				<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-				<li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-				<li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-				<li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-				<li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-				<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+				<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+				<!-- <li class="nav-item"><a class="nav-link" href="artist">Artists</a></li> -->
+				<li class="nav-item"><a class="nav-link" href="#skills">Features</a></li>
+				<li class="nav-item"><a class="nav-link" href="sign_out">Sign Out</a></li>
+				<!-- <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+				<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li> -->
 			  </ul>
 			</div>
 		  </div>
 		</nav>
 	  </header>
     <div class="page-content">
-      <div id="content">
+<div id="content">
 <header>
   <div class="cover bg-light">
     <div class="container px-3">
@@ -80,53 +80,54 @@
       <div class="row">
         <div class="col-md-5">
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">HTML5</span><span>90%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Danceability</span><span>{{ features[0][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="100" data-aos-anchor=".skills-section" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="100" data-aos-anchor=".skills-section" style="width: 90%" aria-valuenow="{{ features[0][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">CSS3</span><span>90%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Energy</span><span>{{ features[1][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="200" data-aos-anchor=".skills-section" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="200" data-aos-anchor=".skills-section" style="width: 90%" aria-valuenow="{{ features[1][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">JavaScript</span><span>80%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Key</span><span>{{ features[2][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="300" data-aos-anchor=".skills-section" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="300" data-aos-anchor=".skills-section" style="width: 80%" aria-valuenow="{{ features[2][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">React</span><span>75%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Loudness</span><span>{{ features[3][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="300" data-aos-anchor=".skills-section" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="300" data-aos-anchor=".skills-section" style="width: 75%" aria-valuenow="{{ features[3][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
         </div>
         <div class="col-md-5 offset-md-2">
+
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">PHP</span><span>70%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Speechiness</span><span>{{ features[5][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="400" data-aos-anchor=".skills-section" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="500" data-aos-anchor=".skills-section" style="width: 70%" aria-valuenow="{{ features[5][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">WordPress</span><span>70%</span></div>
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Valence</span><span>{{ features[9][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="500" data-aos-anchor=".skills-section" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="600" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="{{ features[9][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
-          <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">MySQL</span><span>60%</span></div>
+		  <div class="py-1">
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Acousticness</span><span>{{ features[6][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="600" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="600" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="{{ features[6][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
-          <div class="py-1">
-            <div class="d-flex text-small fw-bolder"><span class="me-auto">Photoshop</span><span>60%</span></div>
+		  <div class="py-1">
+            <div class="d-flex text-small fw-bolder"><span class="me-auto">Instrumentalness</span><span>{{ features[7][1] }}%</span></div>
             <div class="progress my-1">
-              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="600" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-primary" role="progressbar" data-aos="zoom-in-right" data-aos-delay="600" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="{{ features[7][1] }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
         </div>
@@ -135,87 +136,42 @@
   </div>
 </div>
 
-
-
-    
-       
-<div class="artist_container">
-  	<div class="row">
-		{% for album in album_info %}
-			<div class="col-md-4">
-				<div class="profile-card-2">
-					<img src="{{album[1][1]}}" class="img img-responsive">
-					<div class="profile-name"> {{album[0]}} </div>
-					<div class="profile-username">{{album[1][0]}} followers</div>
+	<div class="text-center mb-5">
+		<h2 class="marker marker-center">Albums</h2>
+	</div>
+	<div class="artist_container">
+		<div class="row">
+			{% for album in album_info %}
+				<div class="col-md-4">
+					<div class="profile-card-2">
+						<img src="{{album[1][1]}}" class="img img-responsive">
+						<div class="profile-name"> {{album[0]}} </div>
+						<div class="profile-username">{{album[1][0]}} followers</div>
+					</div>
 				</div>
+			{% endfor %}        
+		</div>
+	</div>
+	<div class="section px-3 px-lg-4 pt-5" id="testimonials">
+		<div class="container-narrow">
+			<div class="text-center mb-5">
+				<h2 class="marker marker-center">Tracks</h2>
 			</div>
-		{% endfor %}        
-    </div>
+			<div class="row"> 
+				{% for track in track_list %}
+					<div class="col-md-6 mb-5" data-aos="fade-right" data-aos-delay="100">
+						<div class="d-flex ms-md-3"><span class="m-2">{{ track }}</span></div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 
 
 
-<!-- 
-
-
-
-<div class="section px-3 px-lg-4 pt-5" id="testimonials">
-  <div class="container-narrow">
-    <div class="text-center mb-5">
-      <h2 class="marker marker-center">Client Testimonials</h2>
-    </div>
-    <div class="row"> 
-      <div class="col-md-6 mb-5" data-aos="fade-right" data-aos-delay="100">
-        <div class="d-flex ms-md-3"><span><i class="fas fa-2x fa-quote-left"></i></span><span class="m-2">Walter displays exemplary professionalism and is able to take on challenges. He learns quickly and is an asset to any team.</span></div>
-        <div class="d-flex justify-content-end align-items-end">
-          <div class="text-end me-2">
-            <div class="fw-bolder">Aiyana</div>
-            <div class="text-small">CEO / Web Design Company</div>
-          
-        </div>
-      </div>
-      <div class="col-md-6 mb-5" data-aos="fade-left" data-aos-delay="300">
-        <div class="d-flex ms-md-3"><span><i class="fas fa-2x fa-quote-left"></i></span><span class="m-2">Walter displays exemplary professionalism and is able to take on challenges. He learns quickly and is an asset to any team.</span></div>
-        <div class="d-flex justify-content-end align-items-end">
-          <div class="text-end me-2">
-            <div class="fw-bolder">Alexander</div>
-            <div class="text-small">CEO / Web Design Company</div>
-          
-        </div>
-      </div>
-      <div class="col-md-6 mb-5" data-aos="fade-right" data-aos-delay="200">
-        <div class="d-flex ms-md-3"><span><i class="fas fa-2x fa-quote-left"></i></span><span class="m-2">Walter is a great co-worker and problem solver. He is quick to extend his helping hand and makes a good team player.</span></div>
-        <div class="d-flex justify-content-end align-items-end">
-          <div class="text-end me-2">
-            <div class="fw-bolder">Ariya</div>
-            <div class="text-small">Web Developer</div>
-          
-        </div>
-      </div>
-      <div class="col-md-6 mb-5" data-aos="fade-left" data-aos-delay="400">
-        <div class="d-flex ms-md-3"><span><i class="fas fa-2x fa-quote-left"></i></span><span class="m-2">Walter is a great co-worker and problem solver. He is quick to extend his helping hand and makes a good team player.</span></div>
-        <div class="d-flex justify-content-end align-items-end">
-          <div class="text-end me-2">
-            <div class="fw-bolder">Braiden</div>
-            <div class="text-small">Web Designer</div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- -->
-
-
-
-{{ track_list }}
-
-
-
-
-
-    </div>
-    <div id="scrolltop"><a class="btn btn-secondary" href="#top"><span class="icon"><i class="fas fa-angle-up fa-x"></i></span></a></div>
+<div id="scrolltop"><a class="btn btn-secondary" href="#top"><span class="icon"><i class="fas fa-angle-up fa-x"></i></span></a></div>
     <script src="{{ url_for('static', filename='scripts/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts/masonry.pkgd.min.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts/BigPicture.min.js') }}"></script>

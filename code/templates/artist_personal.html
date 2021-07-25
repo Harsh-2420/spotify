@@ -15,6 +15,7 @@
     <link type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link type= "text/css" href="{{ url_for('static', filename='css/aos.css') }}" rel="stylesheet">
     <link type= "text/css" href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"> 
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='card.css') }}"/>
     <noscript>
       <style type="text/css">
         [data-aos] {
@@ -120,6 +121,24 @@
 </div>
 
 
+
+    
+{% for album in album_info %}
+    
+<div class="artist_container">
+    <div class="row">
+        
+            <div class="col-md-4">
+                <div class="profile-card-2">
+                    <img src="{{album[1][1]}}" class="img img-responsive">
+                    <div class="profile-name"> {{album[0]}} </div>
+                    <div class="profile-username">{{album[1][0]}} followers</div>
+                </div>
+            </div>
+        
+    </div>
+</div>
+{% endfor %}
 
 
 <!-- 

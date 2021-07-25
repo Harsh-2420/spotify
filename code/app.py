@@ -152,8 +152,7 @@ def artist_personal(artist_id):
         return redirect('/')
     sp = spotipy.Spotify(auth_manager=auth_manager)   
     
-    # Get Artist Data - Image, Name, Followers, Genre
-    # Get Top Tracks
+    # Get Artist Data - Image, Name, Followers, Genre, Redirect
     artist_data = sp.artists([artist_id])['artists'][0]
     name = artist_data['name']
     image = artist_data['images'][1]['url']
@@ -161,11 +160,23 @@ def artist_personal(artist_id):
     genres = artist_data['genres'][0]
     redirect_url = artist_data['external_urls']['spotify']
 
+    # Get Top Tracks
     track_list = []
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_list.append(track['name'])
-    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url)
+    
+    # Get Top albums
+    albums = sp.artist_albums(artist_id, album_type='album')
+    album_info = {}
+    for item in albums['items']: 
+        if item['name'] not in album_info:
+            album_info[item['name']] = [item['release_date'], item['images'][0]['url']]
+    album_info = list(album_info.items())
+
+    # Get Similar Artists
+
+    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url, album_info=album_info)
     
     # for artist in artist_dict.values():
     #     top = sp.artist_top_tracks(url)['tracks']

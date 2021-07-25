@@ -9,3 +9,6 @@ code/jupyter/git_ignore/
 code/.spotify_caches/
 code/.flask_session/
 code/.flask_session/*
+code/__pycache__
+test.py
+code/jupyter/recommend-artist.ipynb

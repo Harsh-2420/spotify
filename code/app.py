@@ -158,13 +158,14 @@ def artist_personal(artist_id):
     name = artist_data['name']
     image = artist_data['images'][1]['url']
     followers = artist_data['followers']['total']
-    genres = artist_data['genres']
+    genres = artist_data['genres'][0]
+    redirect_url = artist_data['external_urls']['spotify']
 
     track_list = []
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_list.append(track['name'])
-    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres)
+    return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url)
     
     # for artist in artist_dict.values():
     #     top = sp.artist_top_tracks(url)['tracks']

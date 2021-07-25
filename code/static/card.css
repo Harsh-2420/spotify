@@ -1,7 +1,11 @@
 
 .artist_container-fluid,
 .artist_container {
-    max-width: 1200px;
+    max-width: 90vw;
+    align-self: center;
+    padding-left: 9vw;
+    /* padding-right: 15vw; */
+    padding-top: 5vh;
 }
 
 .card-artist_container {

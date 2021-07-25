@@ -2,25 +2,21 @@
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='card.css') }}"/>
     <!-- <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script> -->
-    
-    {% for artist in artist_info %}
-    
+       
     <div class="artist_container">
         <div class="row">
-            
+            {% for artist in artist_info %}
                 <div class="col-md-4">
-                    <!-- <a href='artist_personal/{{artist[3]}}'></a> -->
+                    <a href='artist_personal/{{artist[3]}}'>
                     <div class="profile-card-2">
                         <img src="{{artist[1]}}" class="img img-responsive">
                         <div class="profile-name"> {{artist[0]}} </div>
                         <div class="profile-username">{{artist[2]}} followers</div>
                     </div>
-                <!-- </a> -->
+                </a>
                 </div>
-            
+            {% endfor %}
         </div>
     </div>
-    <a href='artist_personal/{{artist[3]}}'>artist redirect</a>
-    {% endfor %}
     
 </html>

@@ -829,6 +829,13 @@ def create_df(collection):
     return df
 
 
+# ----------------------------WORLD TRENDS----------------------------------
+@app.route('/world_trends')
+def world_trends():
+    # return "Found me"
+    return render_template('world_trends.html')
+
+
 
 # ----------------------------CONTACT PAGE----------------------------
 

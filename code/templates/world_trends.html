@@ -4,13 +4,15 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Spotty | Top Artists</title>
+      <title>Spotty | World Trends</title>
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
       <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700;800&amp;display=swap"/>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700;800&amp;display=swap" media="print" onload="this.media='all'"/>
       <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700;800&amp;display=swap"/>
       </noscript>
+      <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+      <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
       <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
       <link type= "text/css" href="{{ url_for('static', filename='css/font-awesome/css/all.min.css') }}" rel="stylesheet">
       <link type= "text/css" href="{{ url_for('static', filename='css/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
@@ -54,9 +56,9 @@
           <!-- <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{image}}" width="400" height="400" alt="Walter Patterson"/></div> -->
           <div class="col-lg-6">
             <div class="mt-5">
-              <p class="lead text-uppercase mb-1">Error</p>
-              <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">Failed to Load</h1>
-              <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">The server is currently under maintenance or is unable to load the data you requested. Try going back to the home screen and refreshing the page or come back later! Sorry about that.</p>
+              <p class="lead text-uppercase mb-1">World Trends</p>
+              <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">Spotify Around the World</h1>
+              <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">Favorites across.</p>
               <!-- <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore <i class="fas fa-arrow-right"></i></a></div> -->
             </div>
           </div>
@@ -65,6 +67,14 @@
     </div>
     <div class="wave-bg"></div>
   </header>
+  <div id='map' style='width: 80vw; height: 80vh; margin-left: 7vw'></div>
+  <script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyc2gtaiIsImEiOiJja3JraHRmMnEzbnA1MndwOGI2OTY1enNrIn0.Lrx1G8lFIKLt_7OsC6ow7g';
+  var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/harsh-j/ckrke2hey0k1317lpg98z2j90'
+  });
+  </script>
   </div>
   </div>
   

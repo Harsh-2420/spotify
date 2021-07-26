@@ -56,8 +56,8 @@
             <p class="lead text-uppercase mb-1">Spotify API</p>
             <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">Music Analytics</h1>
             <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">Spotify Visualisation - Recommendations - NLP Sentiment Analysis</p>
-            <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="#contact">Contact Me</a> <i class="fas fa-arrow-right"></i></a></div>
-          
+            <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="#skills">Explore</a> <i class="fas fa-arrow-right"></i></a></div>
+            </div>
             <nav role="navigation">
                 <ul class="nav justify-content-center">
                     <li class="nav-item"><a class="nav-link" href="https://github.com/Harsh-2420/spotify/" title="GitHub"><i class="fab fa-github"></i><span class="menu-title sr-only">GitHub</span></a></li>
@@ -66,7 +66,6 @@
                   <li class="nav-item"><a class="nav-link" href="https://harsh-2420.github.io/" title="Website"><i class="fab fa-dribbble"></i><span class="menu-title sr-only">Website</span></a></li>
                 </ul>
               </nav>
-            </div>
         </div>
       </div>
     </div>
@@ -158,6 +157,15 @@
                     </div>
                 </a>
             </div>
+            <div class="col-md-4">
+              <a href='world_trends'>
+                  <div class="profile-card-2">
+                      <img src="{{ url_for('static', filename='img/cabin.png') }}" class="img img-responsive">
+                      <div class="profile-name"> World Trends </div>
+                      <!-- <div class="profile-username"> </div> -->
+                  </div>
+              </a>
+          </div>
     </div>
 </div>
 </div>
@@ -171,8 +179,8 @@
       </div>
       <div class="row">
         <div class="col-md-6" data-aos="zoom-in" data-aos-delay="100">
-          <div class="bg-light my-2 p-3 pt-2"><form action="https://formspree.io/your@email.com"
-      method="POST">
+          <div class="bg-light my-2 p-3 pt-2">
+            <form id="contactForm" name="sentMessage" method="POST" action='contact'></form>
       <div class="form-group my-2">
         <label for="name" class="form-label fw-bolder">Name</label>
         <input class="form-control" type="text" id="name" name="name" required>
@@ -191,9 +199,24 @@
         </div>
         <div class="col-md-6" data-aos="fade-left" data-aos-delay="300">
           <div class="mt-3 px-1">
+            <div class="h5">About Spotty!</div>
+            <p> Spotty is a personal project I am working on to improve my skills in Data Engineering and sentiment analysis. This is still a work in progress and if you run into any bugs or have suggestions, contact me below! I would love to improve this website.</p>
+            <p><ul>
+                <li>Improving the Recommendation System
+                    <ul>
+                        <li>Audio Waveform Analysis using parallel CNN-RNN architecture</li>
+                        <li>NLP on the song lyrics to identify user favorites</li>
+                    </ul>
+                </li>
+                <li>Custom inputs for Reddit Visualisation</li>
+                <li>Making the pages load more efficiently</li>
+            </ul></p>
+          </div>
+          <div class="mt-3 px-1">
             <div class="h5">Great to meet you!</div>
             <p>You can check out my other projects by visiting my GitHub or my Website below.</p>
           </div>
+          
           <div class="mt-53 px-1">
             <div class="row"> 
               <div class="col-sm-2">

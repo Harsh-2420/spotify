@@ -121,7 +121,7 @@
           <div class="mt-5">
             <p class="lead text-uppercase mb-1">Music</p>
             <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">Community Recommendations</h1>
-            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">See the recommendations from other users!</p>
+            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">See the recommendations from other users! P.S. In rare cases, we may not recognise songs and we apologise for that. Shoot us a message and we can add it.</p>
             <!-- <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore <i class="fas fa-arrow-right"></i></a></div> -->
           </div>
         </div>
@@ -148,6 +148,21 @@
     </div>
 </div>
 <div id="chart" class="chart"></div>
+<div class="artist_container">
+  <div class="row">
+      {% for track in track_list %}
+          <div class="col-md-4">
+              <a href='artist_personal/{{track[3]}}'>
+              <div class="profile-card-2">
+                  <img src="{{track[2]}}" class="img img-responsive">
+                  <div class="profile-name"> {{track[0]}} </div>
+                  <div class="profile-username">{{track[1]}}</div>
+              </div>
+          </a>
+          </div>
+      {% endfor %}
+  </div>
+</div>
 
 </div>
 </div>

@@ -693,24 +693,50 @@ def spotify_rec():
 
 @app.route('/user_collection')
 def user_collection():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)
     # mongo = current_app.config['mongo']
     collection = mongo.db.userTracks
     track = request.args.get('track')
     artist = request.args.get('artist')
+    
 
     # Initial Run - with no input
     if track == None or artist == None:
         track_df = create_df(collection)
         graphJSON2 = plot_scatter(track_df)
-        return render_template('user_collection.html', graphJSON=graphJSON2)
+        track_list = []
+        for row in track_df.iterrows():
+            track_name = row[1][0]
+            artist_name = row[1][1]
+            artist_id = row[1][4]
+            image = row[1][5]
+            final = [track_name, artist_name, image, artist_id]
+            if final not in track_list:
+                track_list.append([track_name, artist_name, image, artist_id])
+        return render_template('user_collection.html', graphJSON=graphJSON2, track_list=track_list)
     # Secondary Run - with some input provided
     else:
+        artist_id = sp.search(track)['tracks']['items'][0]['album']['artists'][0]['id']
+        image = sp.search(track)['tracks']['items'][0]['album']['images'][1]['url']
         curr_time = int(time.time())
         # Check if data is new or existing and update collection
-        update_db(collection, track, artist, curr_time)
+        update_db(collection, track, artist, curr_time, artist_id, image)
         track_df = create_df(collection)
         graphJSON2 = plot_scatter(track_df)
-        return render_template('user_collection.html', graphJSON=graphJSON2)
+        track_list = []
+        for row in track_df.iterrows():
+            track_name = row[1][0]
+            artist_name = row[1][1]
+            artist_id = row[1][4]
+            image = row[1][5]
+            final = [track_name, artist_name, image, artist_id]
+            if final not in track_list:
+                track_list.append([track_name, artist_name, image, artist_id])
+        return render_template('user_collection.html', graphJSON=graphJSON2, track_list=track_list)
 
 
 def plot_scatter(track_df):
@@ -762,14 +788,14 @@ def plot_scatter(track_df):
     return graphJSON2
 
 
-def update_db(collection, track, artist, curr_time):
+def update_db(collection, track, artist, curr_time, artist_id, image):
     query = collection.find(
         {'track_check': track.lower(), 'artist_check': artist.lower()})
 
     count = query.count()
     if count == 0:
         collection.insert_one({'track': track, 'artist': artist, 'time': curr_time,
-                              'track_check': track.lower(), 'artist_check': artist.lower(), 'count': 1})
+                              'track_check': track.lower(), 'artist_check': artist.lower(), 'count': 1, 'artist_id':artist_id, 'image': image})
     else:
         for result in query:
             id = result['_id']
@@ -781,6 +807,8 @@ def create_df(collection):
     artist_name = []
     suggested_date = []
     song_count = []
+    artist_id = []
+    image = []
     for result in collection.find({}):
         song_name.append(result['track'])
         artist_name.append(result['artist'])
@@ -788,13 +816,16 @@ def create_df(collection):
             result['time']).strftime('%Y-%m-%d %H:%M:%S')
         suggested_date.append(time)
         song_count.append(result['count'])
+        artist_id.append(result['artist_id'])
+        image.append(result['image'])
 
     df = pd.DataFrame({
         'song_name': song_name,
         'artist_name': artist_name,
         'suggested_date': suggested_date,
-        'count': song_count
-
+        'count': song_count,
+        'artist_id': artist_id,
+        'image': image
     })
     return df
 

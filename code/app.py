@@ -668,53 +668,23 @@ def spotify_rec():
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
-
     sp = spotipy.Spotify(auth_manager=auth_manager) 
+    
+    info_list = []
 
-    df = create_related_artist_df(sp)
-
-    fig = go.Figure()
-    fig.add_trace(go.Table(
-        header=dict(values=['Name', 'Popularity', 'Total Followers', 'Recommendation Based On', 'Genres'],
-                    fill_color='paleturquoise',
-                    align='left'),
-        cells=dict(values=[df.name, df.popularity, df.followers, df.based_on, df.genres],
-                   fill_color='lavender',
-                   align='left'))
-                  )
-
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    header = ""
-    description = ''
-    return render_template('spotify_rec.html', graphJSON=graphJSON, header=header, description=description)
-
-
-def create_related_artist_df(sp):
-    results = sp.current_user_top_artists(time_range='long_term', limit=10)
-    name = []
-    popularity = []
-    genres = []
-    followers = []
-    based_on = []
+    results = sp.current_user_top_artists(time_range='short_term', limit=5)
+    artist_list = []
     for item in results['items']:
-
-        top_id = item['id']
-        recs = sp.artist_related_artists(top_id)
-
-        for rec in recs['artists']:
-            based_on.append(item['name'])
-            name.append(rec['name'])
-            popularity.append(rec['popularity'])
-            genres.append(rec['genres'])
-            followers.append(rec['followers']['total'])
-    df = pd.DataFrame()
-    df['name'] = name
-    df['popularity'] = popularity
-    df['genres'] = genres
-    df['followers'] = followers
-    df['based_on'] = based_on
-    # df.loc[df.astype(str).drop_duplicates(subset='genres', keep='first').index]
-    return df
+        seed_id = item['id']
+        recommendations = sp.recommendations(seed_artists=[seed_id], limit=3)
+        for item in recommendations['tracks']:
+            track = item['name']
+            image = item['album']['images'][1]['url']
+            artist = item['album']['artists'][0]['name']
+            artist_id = item['album']['artists'][0]['id']
+            # album = item['album']['name']
+            info_list.append([track, image, artist, artist_id])
+    return render_template('spotify_rec.html', info_list=info_list)
 
 
 # ----------------------------USER COLLECTION PAGE----------------------------------

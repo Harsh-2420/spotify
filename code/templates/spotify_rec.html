@@ -58,6 +58,7 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8">
+    <link href="../static/img/J-icon copy.svg" rel="shortcut icon" type="image/x-icon" /> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Spotty | Spotify Recommendations</title>
@@ -121,7 +122,21 @@
   </div>
   <div class="wave-bg"></div>
 </header>
-<div id="chart" class="chart"></div>
+<div class="artist_container">
+  <div class="row">
+      {% for info in info_list %}
+          <div class="col-md-4">
+              <a href='artist_personal/{{info[3]}}'>
+              <div class="profile-card-2">
+                  <img src="{{info[1]}}" class="img img-responsive">
+                  <div class="profile-name"> {{info[0]}} </div>
+                  <div class="profile-username">{{info[2]}}</div>
+              </div>
+          </a>
+          </div>
+      {% endfor %}
+  </div>
+</div>
 
 </div>
 </div>
@@ -136,9 +151,7 @@
     <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript">
-    var graphs = {{ graphJSON | safe }};
-    Plotly.plot('chart',graphs,{});        
+    <script type="text/javascript">    
       
 </script>
 

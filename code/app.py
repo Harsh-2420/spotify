@@ -833,8 +833,12 @@ def create_df(collection):
 # ----------------------------WORLD TRENDS----------------------------------
 @app.route('/world_trends')
 def world_trends():
-    # return "Found me"
-    return render_template('world_trends.html')
+    df = pd.read_csv('/Users/harshjhunjhunwala/Desktop/github/spotify/data/shazam.csv')
+    data = []
+    for row in df.iterrows():
+        data.append([row[1][3], row[1][4], row[1][5].split(',')[0]])
+
+    return render_template('world_trends.html', data=data)
 
 
 

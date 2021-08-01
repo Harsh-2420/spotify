@@ -12,3 +12,5 @@ code/.flask_session/*
 code/__pycache__
 test.py
 code/jupyter/recommend-artist.ipynb
+*.csv
+*.json

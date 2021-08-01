@@ -13,6 +13,10 @@ import plotly.graph_objects as go
 import json
 from datetime import datetime
 
+import pandas as pd
+from pymongo import MongoClient
+import json
+
 
 
 # twitter imports
@@ -839,6 +843,26 @@ def world_trends():
         data.append([ row[1][5].split(',')[0][2:-1], row[1][4], row[1][3]])
 
     return render_template('world_trends.html', data=json.dumps(data))
+
+
+# ----------------------------CSV TRANSFER----------------------------------
+
+@app.route('/csv_transfer')
+def csv_transfer(csv_path='/Users/harshjhunjhunwala/Desktop/github/spotify/data/shazam.csv', db_name='spotty', coll_name='csv_import', db_url='localhost', db_port=27017):
+    """ 
+    sending the 'world trends' csv file to mongo_db. This should run once a day to keep the data updated.
+    
+    Imports a csv file at path csv_name to a mongo colection
+    returns: count of the documants in the new collection
+    """
+    client = MongoClient(db_url, db_port)
+    db = client[db_name]
+    coll = db[coll_name]
+    data = pd.read_csv(csv_path)
+    payload = json.loads(data.to_json(orient='records'))
+    coll.remove()
+    coll.insert(payload)
+    return str(coll.count())
 
 
 

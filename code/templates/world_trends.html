@@ -79,24 +79,19 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
     <style>
     body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #map {  position: absolute; top: 70vh; left:5vw ; width: 90%; height: 75%}
     </style>
     </head>
     <body>
     <div id="map"></div>
-    <!-- {{ data }} -->
     <script>
       mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyc2gtaiIsImEiOiJja3JraHRmMnEzbnA1MndwOGI2OTY1enNrIn0.Lrx1G8lFIKLt_7OsC6ow7g';
     var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/light-v9',
+    style: 'mapbox://styles/harsh-j/ckrke2hey0k1317lpg98z2j90',
     center: [6.894457, 52.3382670008426],
-    zoom: 11.15
+    zoom: 6
     });
-     
-    // This GeoJSON contains features that include an "icon"
-    // property. The value of the "icon" property corresponds
-    // to an image in the Mapbox Light style's sprite.
 
     function myFunction(data) {
       var features = []
@@ -118,10 +113,6 @@
 }       
 
   var data = {{  data|safe }};
-  // var data = [ ['Topics', -77.003168, 38.894651], [ 'Gaslight',-77.038659, 38.931567] ]
-  // var data = [ ['Bad Habits - Ed Sheeran', 13.0883590415111, 52.3382670008426], ['Bad Habits - Ed Sheeran', 6.894457, 51.34746], ['Love Tonight - Shouse', 11.360781, 48.061596], ['Bad Habits - Ed Sheeran', 8.30956670062143, 53.3949960146367] ]
-
-
     var places = {
     'type': 'FeatureCollection',
     'features': myFunction(data)
@@ -147,7 +138,9 @@
     }
     });
      
-    map.rotateTo(180, { duration: 10000 });
+
+    map.addControl(new mapboxgl.NavigationControl());
+    map.rotateTo(360, { duration: 10000 });
     });
     </script>
      

@@ -900,17 +900,13 @@ def create_charts():
 
     for country_dict in charts_list_response.json()['countries']:
         for city in country_dict['cities']:
-            if len(city_list) < 4:
-                lat, lon = get_lat_lon(city['name'])
-                country_list.append(country_dict['name'])
-                city_list.append(city['name'])
-                coords_lat.append(lat)
-                coords_lon.append(lon)
-                top_10_json = get_top10_json(city['listid']).json()
-                top10.append(get_top10_names(top_10_json))
-                # print(city_list)
-            else:
-                break
+            lat, lon = get_lat_lon(city['name'])
+            country_list.append(country_dict['name'])
+            city_list.append(city['name'])
+            coords_lat.append(lat)
+            coords_lon.append(lon)
+            top_10_json = get_top10_json(city['listid']).json()
+            top10.append(get_top10_names(top_10_json))
 
 
     daily_df = pd.DataFrame({'country': country_list, 'city': city_list,"lat": coords_lat, 'lon': coords_lon ,'top10': top10})

@@ -844,11 +844,9 @@ def world_trends():
     for i in shazam_data:
         dat = dict(i)
     df = pd.DataFrame(dat)
-    # return str(df)
-    # df = pd.read_csv('/Users/harshjhunjhunwala/Desktop/github/spotify/data/shazam.csv')
     data = []
     for row in df.iterrows():
-        data.append([ row[1][6].split(',')[0][2:-1], row[1][5], row[1][4]])
+        data.append([ row[1][4].split(',')[0][2:-1], row[1][3], row[1][2]])
 
     return render_template('world_trends.html', data=json.dumps(data))
 
@@ -864,21 +862,16 @@ def csv_transfer():
     returns: count of the documants in the new collection
     """
     collection = mongo.db.csv_import
-    collection.remove({})
-    create_charts()
-    df = pd.read_csv('./shazam.csv')
-    df.to_json('yourjson.json')                               # saving to json file
-    jdf = open('yourjson.json').read()                        # loading the json file 
-    data = json.loads(jdf)
-    collection.insert_one(data)
-    # client = MongoClient(db_url, db_port)
-    # db = client[db_name]
-    # coll = db[coll_name]
-    # data = pd.read_csv(csv_path)
-    # payload = json.loads(data.to_json(orient='records'))
-    # coll.remove()
-    # coll.insert(payload)
-    # return str(coll.count())
+    try:
+        # create_charts()
+        collection.remove({})
+        df = pd.read_csv('./shazam.csv')
+        df.to_json('yourjson.json')                               # saving to json file
+        jdf = open('yourjson.json').read()                        # loading the json file 
+        data = json.loads(jdf)
+        collection.insert_one(data)
+    except:
+        return "Today's Data Added to Mongo Collection"
     return "Today's Data Added to Mongo Collection"
 
 
@@ -900,13 +893,19 @@ def create_charts():
 
     for country_dict in charts_list_response.json()['countries']:
         for city in country_dict['cities']:
-            lat, lon = get_lat_lon(city['name'])
-            country_list.append(country_dict['name'])
-            city_list.append(city['name'])
-            coords_lat.append(lat)
-            coords_lon.append(lon)
-            top_10_json = get_top10_json(city['listid']).json()
-            top10.append(get_top10_names(top_10_json))
+            # if len(city_list) < 4:
+            try:
+                lat, lon = get_lat_lon(city['name'])
+                country_list.append(country_dict['name'])
+                city_list.append(city['name'])
+                coords_lat.append(lat)
+                coords_lon.append(lon)
+                top_10_json = get_top10_json(city['listid']).json()
+                top10.append(get_top10_names(top_10_json))
+            except:
+                continue
+            # else:
+            #     break
 
 
     daily_df = pd.DataFrame({'country': country_list, 'city': city_list,"lat": coords_lat, 'lon': coords_lon ,'top10': top10})
@@ -940,9 +939,6 @@ def get_lat_lon(name):
     # print(formatted_name)
     response = requests.get("https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?access_token=pk.eyJ1IjoiaGFyc2gtaiIsImEiOiJja3JraHRmMnEzbnA1MndwOGI2OTY1enNrIn0.Lrx1G8lFIKLt_7OsC6ow7g".format(formatted_name[5:]))
     return response.json()['features'][0]['bbox'][1], response.json()['features'][0]['bbox'][0]
-
-
-
 
 
 # ----------------------------CONTACT PAGE----------------------------

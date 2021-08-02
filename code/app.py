@@ -16,7 +16,9 @@ from datetime import datetime
 import pandas as pd
 from pymongo import MongoClient
 import json
+import requests
 
+import urllib
 
 
 # twitter imports
@@ -837,10 +839,14 @@ def create_df(collection):
 # ----------------------------WORLD TRENDS----------------------------------
 @app.route('/world_trends')
 def world_trends():
-    df = pd.read_csv('/Users/harshjhunjhunwala/Desktop/github/spotify/data/shazam.csv')
+    collection = mongo.db.csv_import
+    shazam_data = collection.find({})
+    for i in shazam_data:
+        dat = dict(i)
+    df = pd.DataFrame(dat)
     data = []
     for row in df.iterrows():
-        data.append([ row[1][5].split(',')[0][2:-1], row[1][4], row[1][3]])
+        data.append([ row[1][4].split(',')[0][2:-1], row[1][3], row[1][2]])
 
     return render_template('world_trends.html', data=json.dumps(data))
 
@@ -848,22 +854,91 @@ def world_trends():
 # ----------------------------CSV TRANSFER----------------------------------
 
 @app.route('/csv_transfer')
-def csv_transfer(csv_path='/Users/harshjhunjhunwala/Desktop/github/spotify/data/shazam.csv', db_name='spotty', coll_name='csv_import', db_url='localhost', db_port=27017):
+def csv_transfer():
     """ 
     sending the 'world trends' csv file to mongo_db. This should run once a day to keep the data updated.
     
     Imports a csv file at path csv_name to a mongo colection
     returns: count of the documants in the new collection
     """
-    client = MongoClient(db_url, db_port)
-    db = client[db_name]
-    coll = db[coll_name]
-    data = pd.read_csv(csv_path)
-    payload = json.loads(data.to_json(orient='records'))
-    coll.remove()
-    coll.insert(payload)
-    return str(coll.count())
+    collection = mongo.db.csv_import
+    try:
+        # create_charts()
+        collection.remove({})
+        df = pd.read_csv('./shazam.csv')
+        df.to_json('yourjson.json')                               # saving to json file
+        jdf = open('yourjson.json').read()                        # loading the json file 
+        data = json.loads(jdf)
+        collection.insert_one(data)
+    except:
+        return "Today's Data Added to Mongo Collection"
+    return "Today's Data Added to Mongo Collection"
 
+
+def create_charts():
+    charts_list = "https://shazam.p.rapidapi.com/charts/list"
+
+    charts_list_headers = {
+        'x-rapidapi-key': "d78ca9f758msh31ad154b2fe50a8p12fbc9jsnabb8cabd4076",
+        'x-rapidapi-host': "shazam.p.rapidapi.com"
+        }
+
+    charts_list_response = requests.request("GET", charts_list, headers=charts_list_headers)
+
+    country_list = []
+    city_list = []
+    top10 = []
+    coords_lat = []
+    coords_lon = []
+
+    for country_dict in charts_list_response.json()['countries']:
+        for city in country_dict['cities']:
+            # if len(city_list) < 4:
+            try:
+                lat, lon = get_lat_lon(city['name'])
+                country_list.append(country_dict['name'])
+                city_list.append(city['name'])
+                coords_lat.append(lat)
+                coords_lon.append(lon)
+                top_10_json = get_top10_json(city['listid']).json()
+                top10.append(get_top10_names(top_10_json))
+            except:
+                continue
+            # else:
+            #     break
+
+
+    daily_df = pd.DataFrame({'country': country_list, 'city': city_list,"lat": coords_lat, 'lon': coords_lon ,'top10': top10})
+    daily_df.to_csv('./shazam.csv')
+
+def get_top10_json(list_id):
+    url = "https://shazam.p.rapidapi.com/charts/track"
+
+    querystring = {"locale":"en-US","listId":list_id,"pageSize":"20","startFrom":"0"}
+
+    headers = {
+        'x-rapidapi-key': "d78ca9f758msh31ad154b2fe50a8p12fbc9jsnabb8cabd4076",
+        'x-rapidapi-host': "shazam.p.rapidapi.com"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    return response
+
+
+def get_top10_names(top_10_json):
+    tracks_dict = top_10_json['tracks']
+    names = []
+    for track in tracks_dict:
+        names.append((track['title'] + ' - '+ track['subtitle']))
+    return names
+
+
+def get_lat_lon(name):
+    f = { 'name' : name}
+    formatted_name = urllib.parse.urlencode(f)
+    # print(formatted_name)
+    response = requests.get("https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?access_token=pk.eyJ1IjoiaGFyc2gtaiIsImEiOiJja3JraHRmMnEzbnA1MndwOGI2OTY1enNrIn0.Lrx1G8lFIKLt_7OsC6ow7g".format(formatted_name[5:]))
+    return response.json()['features'][0]['bbox'][1], response.json()['features'][0]['bbox'][0]
 
 
 # ----------------------------CONTACT PAGE----------------------------

@@ -135,7 +135,7 @@ def artist():
         return redirect('/')
 
     sp = spotipy.Spotify(auth_manager=auth_manager)    
-    top_artists  = sp.current_user_top_artists(limit=9)
+    top_artists  = sp.current_user_top_artists(limit=12, time_range='medium_term')
     artist_info = []
     for artist in top_artists['items']: 
         name = artist['name']
@@ -577,7 +577,7 @@ def reddit():
 
 
 def get_reddit_names(sp):
-    results = sp.current_user_top_artists(time_range='long_term', limit=8)
+    results = sp.current_user_top_artists(time_range='medium_term', limit=8)
     names = []
     for item in results['items']:
         names.append(item['name'])

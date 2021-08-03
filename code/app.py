@@ -201,7 +201,7 @@ def artist_personal(artist_id):
     name = artist_data['name']
     image = artist_data['images'][0]['url']
     followers = artist_data['followers']['total']
-    genres = artist_data['genres'][0]
+    genres = artist_data['genres']
     redirect_url = artist_data['external_urls']['spotify']
 
     # Get Top Tracks

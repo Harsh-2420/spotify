@@ -56,7 +56,26 @@
           <div class="mt-5">
             <p class="lead text-uppercase mb-1">Artist</p>
             <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">{{ name }}</h1>
-            <p class="lead fw-normal mt-3 boxed" data-aos="fade-up" data-aos-delay="100">{{ genres }} </p>
+            
+            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">
+              {% for genre in genres %}
+              <div style=" 
+                  background-color: #ddd;
+                  border: none;
+                  color: black;
+                  padding: 10px 20px;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+                  margin: 4px 2px;
+                  border-radius: 16px;"
+                  >
+              
+              {{ genre }} 
+            </div>  
+            {% endfor %}
+            </p>
+          
             <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">{{ followers }} followers</p>
             <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore <i class="fas fa-arrow-right"></i></a></div>
           </div>

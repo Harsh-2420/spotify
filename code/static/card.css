@@ -29,7 +29,9 @@ font-family: 'Open Sans', sans-serif;
 
 
 
- 
+.boxed {
+border: 1px solid green ;
+}
 
 .artist_container-fluid,
 .artist_container {

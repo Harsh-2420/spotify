@@ -1,5 +1,31 @@
 # Spotty - Music Recommendation
 
+
+<!-- Python -->
+<img align="left" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />        
+
+<!-- Spotify -->
+<img align="left" src="https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white" />        
+
+<!-- Flask -->
+<img align="left" src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />        
+
+<!-- Tensorflow -->
+<img align="left" src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=TensorFlow&logoColor=white" />        
+
+<!-- SQL -->
+<img align="left" src="https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white" /> 
+
+<!-- SQL -->
+<img align="left" src="https://img.shields.io/badge/Plotly-239120?style=for-the-badge&logo=plotly&logoColor=white" /> 
+
+<!-- Heroku -->
+<img align="left" src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" /> 
+
+</br>
+</br>
+</br>
+
 Designed a Flask App with Spotify API to recommend music to users using TFIDF vectorizer and performed Exploratory Data Analysis with Plotly. 
 Furthermore, created sentiment analysis with Twitter API and gave the user a popularity score of their favorite artists. 
 Containerized the model pipeline and webapp using Docker and hosted the backend on AWS Cloud using EC2 and S3.

@@ -948,10 +948,9 @@ def contact():
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
-        phone = request.form.get('phone')
         message = request.form.get('message')
         collection = mongo.db.contact
-        collection.insert_one({'name': name, 'phone': phone,
+        collection.insert_one({'name': name,
                                'email': email, 'message': message})
         return render_template('index.html')
     else:

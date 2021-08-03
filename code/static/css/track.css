@@ -1,38 +1,6 @@
-/* 
-body {
-margin: 0;
-padding: 0;
-}
-#map {
-position: absolute;
-top: 0;
-bottom: 0;
-width: 100%;
-}
-.map-marker {
-background-image: url('https://docs.mapbox.com/help/demos/custom-markers-gl-js/mapbox-icon.png');
-background-size: cover;
-width: 50px;
-height: 50px;
-border-radius: 50%;
-cursor: pointer;
-}
-.mapboxgl-popup {
-max-width: 200px;
-}
-.mapboxgl-popup-content {
-text-align: center;
-font-family: 'Open Sans', sans-serif;
-}
 
- */
-
-
-
- 
-
-.artist_container-fluid,
-.artist_container {
+.track_container-fluid,
+.track_container {
     max-width: 90vw;
     align-self: center;
     padding-left: 9vw;
@@ -40,15 +8,15 @@ font-family: 'Open Sans', sans-serif;
     padding-top: 5vh;
 }
 
-.card-artist_container {
+.card-track_container {
     padding: 100px 0px;
     -webkit-perspective: 1000;
     perspective: 1000;
 }
 
-.profile-card-2 {
-    max-width: 300px;
-    max-height: 400px;
+.track-card-2 {
+    max-width: 200px;
+    max-height: 50px;
     background-color: #FFF;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
     background-position: center;
@@ -59,22 +27,22 @@ font-family: 'Open Sans', sans-serif;
     border-radius: 10px;
 }
 
-.profile-card-2 img {
+.track-card-2 img {
     transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-name {
+.track-card-2 .track-name {
     position: absolute;
     left: 30px;
     bottom: 70px;
-    font-size: 30px;
+    font-size: 10px;
     color: #FFF;
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
     font-weight: bold;
     transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-icons {
+.track-card-2 .track-icons {
     position: absolute;
     bottom: 30px;
     right: 30px;
@@ -82,7 +50,7 @@ font-family: 'Open Sans', sans-serif;
     transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-username {
+.track-card-2 .track-username {
     position: absolute;
     bottom: 50px;
     left: 30px;
@@ -91,22 +59,22 @@ font-family: 'Open Sans', sans-serif;
     transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-icons .fa {
+.track-card-2 .track-icons .fa {
     margin: 5px;
 }
 
-.profile-card-2:hover img {
+.track-card-2:hover img {
     filter: grayscale(100%);
 }
 
-.profile-card-2:hover .profile-name {
+.track-card-2:hover .track-name {
     bottom: 80px;
 }
 
-.profile-card-2:hover .profile-username {
+.track-card-2:hover .track-username {
     bottom: 60px;
 }
 
-.profile-card-2:hover .profile-icons {
+.track-card-2:hover .track-icons {
     right: 40px;
 }

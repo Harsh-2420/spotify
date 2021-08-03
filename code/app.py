@@ -208,8 +208,10 @@ def artist_personal(artist_id):
     track_list = []
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
-        track_list.append(track['name'])
+        track_name = track['name']
         track_url = track['external_urls']['spotify']
+        track_image = track['album']['images'][0]['url']
+        track_list.append([track_name, track_image])
     
     # Get Top albums
     albums = sp.artist_albums(artist_id, album_type='album')

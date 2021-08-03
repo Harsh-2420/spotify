@@ -17,6 +17,7 @@
     <link type= "text/css" href="{{ url_for('static', filename='css/aos.css') }}" rel="stylesheet">
     <link type= "text/css" href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"> 
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='card.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/track.css') }}"/>
     <noscript>
       <style type="text/css">
         [data-aos] {
@@ -77,7 +78,7 @@
             </p>
           
             <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">{{ followers }} followers</p>
-            <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore <i class="fas fa-arrow-right"></i></a></div>
+            <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore </a></div>
           </div>
         </div>
       </div>
@@ -157,6 +158,29 @@
   </div>
 </div>
 
+
+<div class="container-narrow">
+  <div class="text-center mb-5">
+    <h2 class="marker marker-center">Tracks</h2>
+  </div>
+</div>
+<div class="track_container">
+  <div class="row">
+    {% for track in track_list %}
+      <div class="col-md-3">
+        <div class="track-card-2" 
+        style='max-width: 242; max-height: 55px;'
+        >
+          <img src="{{ track[1] }}" class="img img-responsive">
+          <div class="track-name" style='font-size: 14px; bottom: 15px; white-space: nowrap; overflow: hidden;'> {{ track[0] }} </div>
+        </div>
+      </div>
+    {% endfor %}        
+  </div>
+</div>
+
+
+
 <div class="section px-3 px-lg-4 pt-5" id="skills">
   <div class="container-narrow">
     <div class="text-center mb-5">
@@ -171,28 +195,12 @@
 					<div class="profile-card-2">
 						<img src="{{album[1][1]}}" class="img img-responsive">
 						<div class="profile-name"> {{album[0]}} </div>
-						<div class="profile-username">{{album[1][0]}} followers</div>
+						<div class="profile-username">{{album[1][0]}}</div>
 					</div>
 				</div>
 			{% endfor %}        
 		</div>
 	</div>
-	<div class="section px-3 px-lg-4 pt-5" id="testimonials">
-		<div class="container-narrow">
-			<div class="text-center mb-5">
-				<h2 class="marker marker-center">Tracks</h2>
-			</div>
-			<div class="row"> 
-				{% for track in track_list %}
-					<div class="col-md-6 mb-5" data-aos="fade-right" data-aos-delay="100">
-						<div class="d-flex ms-md-3"><span class="m-2">{{ track }}</span></div>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
-</div>
-</div>
 
 
 

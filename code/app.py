@@ -225,17 +225,6 @@ def artist_personal(artist_id):
     features = list(sp.audio_features([track_url])[0].items())
 
     return render_template('artist_personal.html', track_list=track_list, name=name, followers=followers, image=image, genres=genres, redirect_url=redirect_url, album_info=album_info, features=features)
-    
-    # for artist in artist_dict.values():
-    #     top = sp.artist_top_tracks(url)['tracks']
-    #     for track in top:
-    #         url = track['external_urls']['spotify']
-    #         artist_top_tracks_dict[track['name']] = url
-    #         break
-    #     break
-    # artist_top_tracks_dict 
-    # pass
-
 
 # ------------------------------ TOP TRACKS PAGE -------------------------------------
 
@@ -249,7 +238,7 @@ def tracks_short_term():
     results = sp.current_user_top_tracks(limit=20, time_range='short_term')
     track_info = []
     for track in results['items']:
-        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['id']])
     return render_template('tracks.html', track_info = track_info)
 
 @app.route('/tracks_medium_term')
@@ -262,7 +251,7 @@ def tracks_medium_term():
     results = sp.current_user_top_tracks(limit=20, time_range='medium_term')
     track_info = []
     for track in results['items']:
-        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['id']])
     return render_template('tracks.html', track_info = track_info)
 
 @app.route('/tracks_long_term')
@@ -275,8 +264,54 @@ def tracks_long_term():
     results = sp.current_user_top_tracks(limit=20, time_range='long_term')
     track_info = []
     for track in results['items']:
-        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['id']])
     return render_template('tracks.html', track_info = track_info)
+
+
+
+# ------------------------------ TRACK SINGLE PAGE -------------------------------------
+@app.route('/track_single/<track_id>')
+def track_single(track_id):
+    # Initialise sp variable
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)   
+    
+    # Track Features
+    try:
+        features = list(sp.audio_features([track_id])[0].items())
+    except:
+        features = []
+
+    # Get Track Data - Image, Artist, Name, Popularity, Artist_Data
+    track_res = sp.track(track_id)
+    track_image = track_res['album']['images'][0]['url']
+    artist_name = track_res['album']['artists'][0]['name']
+    track_name = track_res['name']
+    track_popularity = track_res['popularity']/10
+
+
+    artist_id = track_res['artists'][0]['id']
+    # artist_data = sp.artists([artist_id])['artists'][0]
+    # artist_image = artist_data['images'][0]['url']
+    # followers = artist_data['followers']['total']
+    # genres = artist_data['genres']
+    # redirect_url = artist_data['external_urls']['spotify']
+
+    # Get Top Tracks by the Artist
+    track_list = []
+    top_tracks = sp.artist_top_tracks(artist_id)['tracks']
+    for track in top_tracks:
+        track_name = track['name']
+        track_image = track['album']['images'][0]['url']
+        track_list.append([track_name, track_image])
+
+
+
+    return render_template('artist_personal.html', artist_id=artist_id, track_list=track_list, name=track_name, artist_name=artist_name, image=track_image, popularity=track_popularity, features=features)
+
 
 
 # ----------------------------TOP PAGE----------------------------

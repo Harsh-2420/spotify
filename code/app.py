@@ -287,13 +287,14 @@ def track_single(track_id):
 
     # Get Track Data - Image, Artist, Name, Popularity, Artist_Data
     track_res = sp.track(track_id)
-    track_image = track_res['album']['images'][0]['url']
+    track_image_curr = track_res['album']['images'][0]['url']
     artist_name = track_res['album']['artists'][0]['name']
-    track_name = track_res['name']
+    track_name_curr = track_res['name']
     track_popularity = track_res['popularity']/10
 
 
     artist_id = track_res['artists'][0]['id']
+    artist_redirect_url = track_res['external_urls']['spotify']
     # artist_data = sp.artists([artist_id])['artists'][0]
     # artist_image = artist_data['images'][0]['url']
     # followers = artist_data['followers']['total']
@@ -310,7 +311,7 @@ def track_single(track_id):
 
 
 
-    return render_template('artist_personal.html', artist_id=artist_id, track_list=track_list, name=track_name, artist_name=artist_name, image=track_image, popularity=track_popularity, features=features)
+    return render_template('track_single.html', artist_id=artist_id, track_list=track_list, track_name_curr=track_name_curr, artist_name=artist_name, track_image_curr=track_image_curr, popularity=track_popularity, features=features, redirect_url=artist_redirect_url)
 
 
 

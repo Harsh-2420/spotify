@@ -4,7 +4,7 @@
     <link href="../static/img/J-icon copy.svg" rel="shortcut icon" type="image/x-icon" /> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ name }} | Spotty</title>
+    <title>{{ track_name_curr }} | Spotty</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700;800&amp;display=swap"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700;800&amp;display=swap" media="print" onload="this.media='all'"/>
@@ -52,13 +52,12 @@
     <div class="container px-3">
       <div class="row">
         <!-- <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{ url_for('static', filename='images/avatar.jpg') }}" width="400" height="400" alt="Walter Patterson"/></div> -->
-        <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{image}}" width="400" height="400" alt="Walter Patterson"/></div>
+        <div class="col-lg-6 p-2"><img class="avatar img-fluid mt-2" src="{{track_image_curr}}" width="400" height="400" alt="Walter Patterson"/></div>
         <div class="col-lg-6">
           <div class="mt-5">
             <p class="lead text-uppercase mb-1">Track</p>
-            <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">{{ name }}</h1>
-            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">
-              <a href='artist_personal/{{ artist_id }}'>
+            <h1 class="intro-title marker" data-aos="fade-left" data-aos-delay="50">{{ track_name_curr }}</h1>
+                 <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">
               <div style=" 
                   background-color: #ddd;
                   border: none;
@@ -74,10 +73,23 @@
               
               {{ artist_name }} 
             </div>  
-        </a>
+                <div style=" 
+                  background-color: #ddd;
+                  border: none;
+                  color: black;
+                  padding: 10px 20px;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+                  margin: 4px 2px;
+                  cursor:pointer;
+                  border-radius: 16px;"
+                  >
+              
+                  {{ popularity }} popularity
+            </div>  
+            
             </p>
-          
-            <p class="lead fw-normal mt-3" data-aos="fade-up" data-aos-delay="100">{{ popularity }} popularity</p>
             <div class="mt-3" data-aos="fade-up" data-aos-delay="200"><a class="btn btn-primary shadow-sm mt-1 hover-effect" href="{{ redirect_url }}">Explore </a></div>
           </div>
         </div>

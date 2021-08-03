@@ -127,26 +127,64 @@ def sign_out():
 
 # ------------------------------ TOP ARTISTS PAGE -------------------------------------
 
-@app.route('/artist')
-def artist():
+@app.route('/artist_short_term')
+def artist_short_term():
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
 
     sp = spotipy.Spotify(auth_manager=auth_manager)    
-    top_artists  = sp.current_user_top_artists(limit=12, time_range='medium_term')
+
+    top_artists  = sp.current_user_top_artists(limit=9, time_range='short_term')
     artist_info = []
     for artist in top_artists['items']: 
         name = artist['name']
         image = artist['images'][1]['url']
         followers = artist['followers']['total']
         url = artist['id']
-        # genres = artist['genres']
         artist_info.append([name, image, followers, url])
-        # artist_dict[artist['name']] = [artist['images'][1]['url'], artist['followers']['total'], artist['genres'], artist['external_urls']['spotify'] ]
     return render_template('artist.html', artist_info = artist_info)
 
+
+@app.route('/artist_medium_term')
+def artist_medium_term():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+
+    top_artists  = sp.current_user_top_artists(limit=9, time_range='medium_term')
+    artist_info = []
+    for artist in top_artists['items']: 
+        name = artist['name']
+        image = artist['images'][1]['url']
+        followers = artist['followers']['total']
+        url = artist['id']
+        artist_info.append([name, image, followers, url])
+    return render_template('artist.html', artist_info = artist_info)
+
+
+@app.route('/artist_long_term')
+def artist_long_term():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+
+    top_artists  = sp.current_user_top_artists(limit=9, time_range='long_term')
+    artist_info = []
+    for artist in top_artists['items']: 
+        name = artist['name']
+        image = artist['images'][1]['url']
+        followers = artist['followers']['total']
+        url = artist['id']
+        artist_info.append([name, image, followers, url])
+    return render_template('artist.html', artist_info = artist_info)
 
 # ------------------------------ ARTIST PERSONAL PAGE -------------------------------------
 @app.route('/artist_personal/<artist_id>')
@@ -199,14 +237,40 @@ def artist_personal(artist_id):
 
 # ------------------------------ TOP TRACKS PAGE -------------------------------------
 
-@app.route('/tracks')
-def tracks():
+@app.route('/tracks_short_term')
+def tracks_short_term():
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
     sp = spotipy.Spotify(auth_manager=auth_manager)    
-    results = sp.current_user_top_tracks(limit=20)
+    results = sp.current_user_top_tracks(limit=20, time_range='short_term')
+    track_info = []
+    for track in results['items']:
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+    return render_template('tracks.html', track_info = track_info)
+
+@app.route('/tracks_medium_term')
+def tracks_medium_term():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+    results = sp.current_user_top_tracks(limit=20, time_range='medium_term')
+    track_info = []
+    for track in results['items']:
+        track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])
+    return render_template('tracks.html', track_info = track_info)
+
+@app.route('/tracks_long_term')
+def tracks_long_term():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager)    
+    results = sp.current_user_top_tracks(limit=20, time_range='long_term')
     track_info = []
     for track in results['items']:
         track_info.append([track['name'], track['album']['artists'][0]['name'], track['album']['images'][1]['url'], track['album']['artists'][0]['id']])

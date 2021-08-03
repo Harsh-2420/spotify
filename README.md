@@ -4,6 +4,9 @@
 <!-- Python -->
 <img align="left" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />        
 
+<!-- Spotify -->
+<img align="left" src="https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white" />        
+
 <!-- Flask -->
 <img align="left" src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />        
 

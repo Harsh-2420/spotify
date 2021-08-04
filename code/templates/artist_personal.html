@@ -168,12 +168,14 @@
   <div class="row">
     {% for track in track_list %}
       <div class="col-md-3">
+        <a href="/track_single/{{ track[2] }}">
         <div class="track-card-2" 
         style='max-width: 242; max-height: 55px;'
         >
           <img src="{{ track[1] }}" class="img img-responsive">
           <div class="track-name" style='font-size: 14px; bottom: 15px; white-space: nowrap; overflow: hidden;'> {{ track[0] }} </div>
         </div>
+      </a>
       </div>
     {% endfor %}        
   </div>

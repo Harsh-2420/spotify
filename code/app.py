@@ -141,7 +141,7 @@ def artist_short_term():
     for artist in top_artists['items']: 
         name = artist['name']
         image = artist['images'][1]['url']
-        followers = artist['followers']['total']
+        followers = format(artist['followers']['total'], ',d')
         url = artist['id']
         artist_info.append([name, image, followers, url])
     return render_template('artist.html', artist_info = artist_info)
@@ -161,7 +161,7 @@ def artist_medium_term():
     for artist in top_artists['items']: 
         name = artist['name']
         image = artist['images'][1]['url']
-        followers = artist['followers']['total']
+        followers = format(artist['followers']['total'], ',d')
         url = artist['id']
         artist_info.append([name, image, followers, url])
     return render_template('artist.html', artist_info = artist_info)
@@ -181,7 +181,7 @@ def artist_long_term():
     for artist in top_artists['items']: 
         name = artist['name']
         image = artist['images'][1]['url']
-        followers = artist['followers']['total']
+        followers = format(artist['followers']['total'], ',d')
         url = artist['id']
         artist_info.append([name, image, followers, url])
     return render_template('artist.html', artist_info = artist_info)
@@ -200,7 +200,7 @@ def artist_personal(artist_id):
     artist_data = sp.artists([artist_id])['artists'][0]
     name = artist_data['name']
     image = artist_data['images'][0]['url']
-    followers = artist_data['followers']['total']
+    followers = format(artist_data['followers']['total'], ',d')
     genres = artist_data['genres']
     redirect_url = artist_data['external_urls']['spotify']
 
@@ -209,9 +209,10 @@ def artist_personal(artist_id):
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_name = track['name']
+        track_id = track['id']
         track_url = track['external_urls']['spotify']
         track_image = track['album']['images'][0]['url']
-        track_list.append([track_name, track_image])
+        track_list.append([track_name, track_image, track_id])
     
     # Get Top albums
     albums = sp.artist_albums(artist_id, album_type='album')
@@ -306,8 +307,9 @@ def track_single(track_id):
     top_tracks = sp.artist_top_tracks(artist_id)['tracks']
     for track in top_tracks:
         track_name = track['name']
+        track_id = track['id']
         track_image = track['album']['images'][0]['url']
-        track_list.append([track_name, track_image])
+        track_list.append([track_name, track_image, track_id])
 
 
 

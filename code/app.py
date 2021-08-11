@@ -784,14 +784,14 @@ def spotify_rec():
 
     results = sp.current_user_top_artists(time_range='short_term', limit=5)
     artist_list = []
-    for item in results['items']:
-        seed_id = item['id']
+    for artist_item in results['items']:
+        seed_id = artist_item['id']
         recommendations = sp.recommendations(seed_artists=[seed_id], limit=3)
         for item in recommendations['tracks']:
             track = item['name']
             image = item['album']['images'][1]['url']
             artist = item['album']['artists'][0]['name']
-            artist_id = item['album']['artists'][0]['id']
+            artist_id = item['id']
             # album = item['album']['name']
             info_list.append([track, image, artist, artist_id])
     return render_template('spotify_rec.html', info_list=info_list)

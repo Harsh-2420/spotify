@@ -233,11 +233,9 @@ def track_single(track_id):
 
     artist_id = track_res['artists'][0]['id']
     artist_redirect_url = track_res['external_urls']['spotify']
-    # artist_data = sp.artists([artist_id])['artists'][0]
-    # artist_image = artist_data['images'][0]['url']
-    # followers = artist_data['followers']['total']
-    # genres = artist_data['genres']
-    # redirect_url = artist_data['external_urls']['spotify']
+
+    # # Check if the track is saved
+    # saved_bool = sp.current_user_saved_tracks_contains([track_id])[0]
 
     # Get Top Tracks by the Artist
     track_list = []
@@ -247,11 +245,29 @@ def track_single(track_id):
         track_id = track['id']
         track_image = track['album']['images'][0]['url']
         track_list.append([track_name, track_image, track_id])
-
-
-
     return render_template('track_single.html', artist_id=artist_id, track_list=track_list, track_name_curr=track_name_curr, artist_name=artist_name, track_image_curr=track_image_curr, popularity=track_popularity, features=features, redirect_url=artist_redirect_url)
 
+# @app.context_processor
+# def utility_processor():
+#     def remove_track(track_id):
+#         cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+#         auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+#         if not auth_manager.validate_token(cache_handler.get_cached_token()):
+#             return redirect('/')
+#         sp = spotipy.Spotify(auth_manager=auth_manager)
+#         sp.current_user_saved_tracks_delete([track_id])
+#     return dict(remove_track=remove_track)
+
+# @app.context_processor
+# def utility_processor():
+#     def add_track(track_id):
+#         cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+#         auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+#         if not auth_manager.validate_token(cache_handler.get_cached_token()):
+#             return redirect('/')
+#         sp = spotipy.Spotify(auth_manager=auth_manager)
+#         sp.current_user_saved_tracks_delete([track_id])
+#     return dict(add_track=add_track)
 
 
 # ----------------------------TOP PAGE----------------------------

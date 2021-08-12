@@ -19,6 +19,7 @@ import json
 import requests
 
 import urllib
+import itertools
 
 
 # twitter imports
@@ -247,27 +248,33 @@ def track_single(track_id):
         track_list.append([track_name, track_image, track_id])
     return render_template('track_single.html', artist_id=artist_id, track_list=track_list, track_name_curr=track_name_curr, artist_name=artist_name, track_image_curr=track_image_curr, popularity=track_popularity, features=features, redirect_url=artist_redirect_url)
 
-# @app.context_processor
-# def utility_processor():
-#     def remove_track(track_id):
-#         cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-#         auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
-#         if not auth_manager.validate_token(cache_handler.get_cached_token()):
-#             return redirect('/')
-#         sp = spotipy.Spotify(auth_manager=auth_manager)
-#         sp.current_user_saved_tracks_delete([track_id])
-#     return dict(remove_track=remove_track)
 
-# @app.context_processor
-# def utility_processor():
-#     def add_track(track_id):
-#         cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-#         auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
-#         if not auth_manager.validate_token(cache_handler.get_cached_token()):
-#             return redirect('/')
-#         sp = spotipy.Spotify(auth_manager=auth_manager)
-#         sp.current_user_saved_tracks_delete([track_id])
-#     return dict(add_track=add_track)
+# ----------------------------DASHBOARD PAGE----------------------------
+@app.route('/dashboard')
+def dashboard():
+    # Initialise sp variable
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    sp = spotipy.Spotify(auth_manager=auth_manager) 
+
+    
+
+    top_tracks = sp.current_user_top_tracks(time_range='short_term')
+    feature_list = []
+    genre_list = []
+    for item in top_tracks['items']:
+        url = item['external_urls']['spotify']
+        artist_id = item['album']['artists'][0]['id']
+        genres = sp.artists([artist_id])['artists'][0]['genres']
+        features = list(sp.audio_features([url])[0].items())
+        for genre in genres:
+            genre_list.append(genre)
+        feature_list.append(features)
+
+
+
 
 
 # ----------------------------TOP PAGE----------------------------

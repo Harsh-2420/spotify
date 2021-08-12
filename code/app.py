@@ -18,9 +18,9 @@ import urllib
 import time
 import os
 from os import environ
-import redis
-from rq import Queue
-from rq.job import Job
+# import redis
+# from rq import Queue
+# from rq.job import Job
 
 # Mongo
 from pymongo import MongoClient

@@ -1,5 +1,5 @@
 # Flask imports
-from flask import Flask, request, url_for, redirect, session, render_template
+from flask import Flask, request, url_for, redirect, session, render_template, render_template_string
 from flask_session import Session
 from flask_pymongo import PyMongo
 import sys
@@ -12,33 +12,38 @@ import plotly.express as px
 import plotly.graph_objects as go
 import json
 from datetime import datetime
-
-import pandas as pd
-from pymongo import MongoClient
-import json
+from collections import Counter 
 import requests
-
 import urllib
-import itertools
+import time
+import os
+from os import environ
+import redis
+from rq import Queue
+from rq.job import Job
 
+# Mongo
+from pymongo import MongoClient
 
-# twitter imports
+# Twitter
 import tweepy
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import re
 
-# Reddit Imports
+# Reddit 
 import praw
 
-# Spotipy imports
+# Spotipy
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import os
-from os import environ
+
 
 mongo_uri = environ.get('MONGO_URI')
 app = Flask(__name__)
+
+r = redis.Redis()
+q = Queue(connection=r)
 
 app.config['MONGO_URI'] = mongo_uri
 mongo = PyMongo(app)
@@ -47,9 +52,6 @@ app.config['SECRET_KEY'] = os.urandom(64)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
-
-# SPOTIPY_CLIENT_ID = environ['SPOTIPY_CLIENT_ID']
-# SPOTIPY_CLIENT_SECRET = environ['SPOTIPY_CLIENT_SECRET']
 
 # Twitter Keys
 twitter_consumer_key = environ['twitter_consumer_key']
@@ -259,20 +261,34 @@ def dashboard():
         return redirect('/')
     sp = spotipy.Spotify(auth_manager=auth_manager) 
 
-    
-
-    top_tracks = sp.current_user_top_tracks(time_range='short_term')
-    feature_list = []
+    top_tracks = sp.current_user_top_tracks(time_range='short_term', limit=30)
+    feature_list = [0, 0, 0, 0, 0]
     genre_list = []
     for item in top_tracks['items']:
         url = item['external_urls']['spotify']
         artist_id = item['album']['artists'][0]['id']
         genres = sp.artists([artist_id])['artists'][0]['genres']
         features = list(sp.audio_features([url])[0].items())
+
+        dance = features[0][1]
+        energy = features[1][1]
+        speechiness = features[5][1]
+        acousticness = features[6][1]
+        lively = features[8][1]
+        
+        max_list = [dance,energy,speechiness,acousticness,lively]
+        max_val = max(max_list)
+        max_index = max_list.index(max_val)
+
         for genre in genres:
             genre_list.append(genre)
-        feature_list.append(features)
-
+        feature_list[max_index] += 1
+        
+    counter = Counter(genre_list).most_common()   
+    features_perc = []
+    for val in feature_list:
+        features_perc.append(round(val/40*100, 1))
+    
 
 
 
@@ -561,7 +577,6 @@ def percentage(part, whole):
 # ----------------------------REDDIT PAGE----------------------------
 
 
-
 @app.route('/reddit')
 def reddit():
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
@@ -582,28 +597,6 @@ def reddit():
         size="Total Comments on post",
         color="Artist Name",
         hover_name="Title")
-    # hover_text = []
-    # bubble_size = []
-    # for index, row in df.iterrows():
-    #     hover_text.append(('song name: {country}<br>' +
-    #                        'popularity: {lifeExp}<br>' +
-    #                        'release: {gdp}<br>' +
-    #                        'duration: {pop}<br>').format(country=row['Artist Name'],
-    #                                                      lifeExp=row['Date Created'],
-    #                                                      gdp=row['Number of Upvotes'],
-    #                                                      pop=row['Total Comments on post']))
-    #     bubble_size.append(row['Total Comments on post'])
-    # df['text'] = hover_text
-    # df['size'] = bubble_size
-    # d = dict(tuple(df.groupby('Artist Name')))
-    # fig = go.Figure()
-    # for artist, data in d.items():
-    #     fig.add_trace(go.Scatter(
-    #         x=data['Date Created'], y=data['Number of Upvotes'],
-    #         name=artist, text=data['text'],
-    #         marker_size=data['size'],
-    #     ))
-
     if key == None:
         iteration = 0
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -639,9 +632,8 @@ def reddit():
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
         return render_template('reddit.html', graphJSON=graphJSON, iteration=iteration)
 
-
 def get_reddit_names(sp):
-    results = sp.current_user_top_artists(time_range='medium_term', limit=8)
+    results = sp.current_user_top_artists(time_range='short_term', limit=10)
     names = []
     for item in results['items']:
         names.append(item['name'])
@@ -663,7 +655,7 @@ def get_reddit_top_artist_data(names, reddit_obj):
     artist = []
     for key, val in d.items():
         try:
-            for sub in val.hot(limit=50):
+            for sub in val.hot(limit=20):
                 time = datetime.utcfromtimestamp(
                     sub.created).strftime('%Y-%m-%d')
                 id_list.append(sub.id)
@@ -728,6 +720,44 @@ def get_new_df(key, reddit_obj):
     df['platform'] = platform
     df['Artist Name'] = artist
     return df
+
+# template_str='''<html>
+#     <head>
+#       {% if refresh %}
+#         <meta http-equiv="refresh" content="5">
+#       {% endif %}
+#     </head>
+#     <body>{{result}}</body>
+#     </html>'''
+
+# def get_template(data, refresh=False):
+#     return render_template_string(template_str, result=data, refresh=refresh)
+
+# def reddit_test(data):
+#     time.sleep(12)
+#     return 'Processed %s' % (data,)
+
+# @app.route('/reddit/<data>')
+# def reddit(data):
+#     job = q.enqueue(reddit_test, data)
+#     return redirect(url_for('result', id=job.id))
+
+# @app.route('/result/<id>')
+# def result(id):
+#     job = Job.fetch(id, connection=r)
+#     status = job.get_status()
+#     if status in ['queued', 'started', 'deferred', 'failed']:
+#         return get_template(status, refresh=True)
+#         # return 'not done'
+#     elif status == 'finished':
+#         result = job.result 
+#         # If this is a string, we can simply return it:
+#         return get_template(result)
+
+# @app.route('/reddit/get/')
+# def get():
+#     print(q.jobs)
+#     return str(len(q))
 
 
 # ----------------------------RECOMMENDATIONS PAGE----------------------------

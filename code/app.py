@@ -2,10 +2,8 @@
 from flask import Flask, request, url_for, redirect, session, render_template, render_template_string
 from flask_session import Session
 from flask_pymongo import PyMongo
-import sys
 import uuid
 import pandas as pd
-import numpy as np
 import math
 import plotly
 import plotly.express as px
@@ -42,8 +40,8 @@ from spotipy.oauth2 import SpotifyOAuth
 mongo_uri = environ.get('MONGO_URI')
 app = Flask(__name__)
 
-r = redis.Redis()
-q = Queue(connection=r)
+# r = redis.Redis()
+# q = Queue(connection=r)
 
 app.config['MONGO_URI'] = mongo_uri
 mongo = PyMongo(app)
